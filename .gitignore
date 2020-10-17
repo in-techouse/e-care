@@ -1,0 +1,15 @@
+*.iml
+.gradle
+/local.properties
+.idea/
+.idea
+/.idea/
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+/app/google-services.json
+/src/main/res/values/keys.xml
+/src/main/res/values/keys
