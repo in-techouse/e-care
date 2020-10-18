@@ -33,6 +33,7 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 import kc.fyp.ecare.R;
 import kc.fyp.ecare.director.Constants;
 import kc.fyp.ecare.director.Helpers;
+import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.User;
 
 public class OTPVerification extends AppCompatActivity implements View.OnClickListener {
@@ -43,6 +44,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
     private PinView firstPinView;
     private TextView timer, action_resend;
     private CircularProgressButton action_verify_otp;
+    private boolean isRegistration;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
@@ -85,6 +87,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             finish();
             return;
         }
+        isRegistration = bundle.getBoolean("isRegistration");
 
         TextView enterOtpText = findViewById(R.id.enterOtpText);
         enterOtpText.setText("Enter the OTP code received at, " + user.getPhoneNumber());
@@ -162,8 +165,12 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                 action_verify_otp.startAnimation();
                 firstPinView.setError(null);
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, otp);
-                // Link User Account with Phone Number
-                linkWithPhoneNumber(credential);
+                if (isRegistration) {
+                    // Link User Account with Phone Number
+                    linkWithPhoneNumber(credential);
+                } else {
+                    signInUser(credential);
+                }
                 break;
             }
         }
@@ -189,8 +196,12 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                // Link User Account with Phone Number
-                linkWithPhoneNumber(phoneAuthCredential);
+                if (isRegistration) {
+                    // Link User Account with Phone Number
+                    linkWithPhoneNumber(phoneAuthCredential);
+                } else {
+                    signInUser(phoneAuthCredential);
+                }
             }
 
             @SuppressLint("UseCompatLoadingForDrawables")
@@ -201,6 +212,40 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             }
         };
         provider.verifyPhoneNumber(user.getPhoneNumber(), 120, TimeUnit.SECONDS, this, callBack);
+    }
+
+    // SignIn User Automatically
+    private void signInUser(PhoneAuthCredential phoneAuthCredential) {
+        auth.signInWithCredential(phoneAuthCredential)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        if (auth.getCurrentUser() != null) {
+                            if (auth.getCurrentUser().isEmailVerified()) {
+                                // Set Session and move to Dashboard
+                                Session session = new Session(getApplicationContext());
+                                session.setSession(user);
+                                Log.e(TAG, "User Login is Successful");
+                                Helpers.showSuccess(OTPVerification.this, "LOGIN SUCCESS!", "Your login is successfull");
+                            } else {
+                                revertButton();
+                                Helpers.showError(OTPVerification.this, Constants.LOGIN_FAILED, Constants.EMAIL_NOT_VERIFIED_ERROR);
+                                auth.signOut();
+                            }
+
+                        } else {
+                            revertButton();
+                            Helpers.showError(OTPVerification.this, Constants.LOGIN_FAILED, Constants.SOMETHING_WENT_WRONG);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        revertButton();
+                        Helpers.showError(OTPVerification.this, Constants.LOGIN_FAILED, e.getMessage());
+                    }
+                });
     }
 
     // Link User Account with Phone Number
@@ -237,6 +282,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            Log.e(TAG, "Verification Email is Sent");
                             // Save user detail to database
                             saveUserToDatabase();
                         }

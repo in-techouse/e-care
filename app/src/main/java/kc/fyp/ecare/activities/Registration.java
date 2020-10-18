@@ -233,6 +233,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
                         Intent it = new Intent(Registration.this, OTPVerification.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("user", user);
+                        bundle.putBoolean("isRegistration", true);
                         bundle.putString("verificationId", verificationId);
                         bundle.putParcelable("resendToken", forceResendingToken);
                         it.putExtras(bundle);
@@ -246,6 +247,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
                         Intent it = new Intent(Registration.this, OTPVerification.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("user", user);
+                        bundle.putBoolean("isRegistration", true);
                         bundle.putString("verificationId", verificationId);
                         bundle.putParcelable("resendToken", forceResendingToken);
                         it.putExtras(bundle);

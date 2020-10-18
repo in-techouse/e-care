@@ -2,6 +2,7 @@ package kc.fyp.ecare.director;
 
 public class Constants {
     public static final String LOGIN_FAILED = "LOGIN FAILED!";
+    public static final String NO_ACCOUNT_FOUND = "We can't found any account associated with this number. If you don't have an account please create one to continue.";
     public static final String REGISTRATION_FAILED = "REGISTRATION FAILED!";
     public static final String EXIT_CONFIRMATION = "EXIT CONFIRMATION!";
     public static final String EXIT_MESSAGE = "Your registration process is not completed yet. Are you sure to exit?";
@@ -14,6 +15,7 @@ public class Constants {
     public static final String PASSWORD_RECOVERY_MESSAGE = "Instructions to recover your has been sent to your following email address, ";
     public static final String NO_INTERNET = "No internet connection found, connect to a network and try again.";
     public static final String SOMETHING_WENT_WRONG = "Something went wrong. Please try again later.";
+    public static final String EMAIL_NOT_VERIFIED_ERROR = "Your email is not verified yet. Please verify your email first.";
 
     public static final String PHONE_NUMBER_ERROR = "Phone number is invalid";
     public static final String EMAIL_ERROR = "Email is invalid";
