@@ -30,13 +30,14 @@
                 android:id="@+id/ccp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:ccp_autoFormatNumber="true"
                 app:ccp_countryPreference="PK"
                 app:ccp_defaultNameCode="PK" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/str_phone_number">
+                android:hint="@string/your_phone_number">
 
                 <EditText
                     android:id="@+id/edtPhone"
@@ -47,6 +48,22 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/action_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/mp15"
+            android:layout_marginBottom="@dimen/mp15"
+            android:background="@drawable/rounded_button"
+            android:gravity="center"
+            android:text="@string/action_login"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="@dimen/mp7"
+            app:spinning_bar_width="@dimen/mp5" />
 
         <TextView
             android:id="@+id/action_login_via_email"

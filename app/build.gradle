@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -11,6 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -27,6 +29,7 @@ dependencies {
     /*********************** Android Default Libraries **************************/
     /****************************************************************************/
     testImplementation 'junit:junit:4.13'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -38,6 +41,12 @@ dependencies {
     /****************************************************************************/
     /******************************** Firebase **********************************/
     /****************************************************************************/
+    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-core:17.5.1'
+    implementation 'com.google.firebase:firebase-auth:19.4.0'
+    implementation 'com.google.firebase:firebase-database:19.5.0'
+    implementation 'com.google.firebase:firebase-storage:19.2.0'
 
     /****************************************************************************/
     /************************** Third Party Libraries ***************************/
@@ -58,4 +67,6 @@ dependencies {
     implementation 'br.com.simplepass:loading-button-android:2.2.0'
     // Fancy Alert Dialog Library
     implementation 'com.github.Shashank02051997:FancyAlertDialog-Android:0.1'
+    // PIN View for Mobile OTP
+    implementation 'com.chaos.view:pinview:1.4.4'
 }

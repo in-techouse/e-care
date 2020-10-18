@@ -66,4 +66,32 @@ public class Helpers {
                 .setIcon(R.drawable.ic_action_close, Icon.Visible)
                 .build();
     }
+
+    // Show Error and Close Activity
+    public static void showSuccessWithActivityClose(final Activity a, String title, String message) {
+        new FancyAlertDialog.Builder(a)
+                .setTitle(title)
+                .setMessage(message)
+                .setBackgroundColor(a.getResources().getColor(R.color.colorPrimaryDark))
+                .setNegativeBtnText("CLOSE")
+                .setNegativeBtnBackground(a.getResources().getColor(R.color.colorDanger))
+                .setPositiveBtnText("OKAY")
+                .setPositiveBtnBackground(a.getResources().getColor(R.color.colorPrimary))
+                .setAnimation(Animation.POP)
+                .isCancellable(false)
+                .setIcon(R.drawable.ic_action_okay, Icon.Visible)
+                .OnPositiveClicked(new FancyAlertDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        a.finish();
+                    }
+                })
+                .OnNegativeClicked(new FancyAlertDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        a.finish();
+                    }
+                })
+                .build();
+    }
 }
