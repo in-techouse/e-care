@@ -13,4 +13,6 @@
     <string name="action_register">REGISTER</string>
     <string name="your_name">Your Name</string>
     <string name="your_password_confirmation">Your Password Confirmation</string>
+    <string name="action_verify_otp">VERIFY</string>
+    <string name="action_resend">RESEND OTP</string>
 </resources>

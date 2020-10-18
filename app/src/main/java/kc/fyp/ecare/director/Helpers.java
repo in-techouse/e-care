@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-
 import com.shashank.sony.fancydialoglib.Animation;
 import com.shashank.sony.fancydialoglib.FancyAlertDialog;
 import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
@@ -23,7 +22,7 @@ public class Helpers {
         return Objects.requireNonNull(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)).getState() == NetworkInfo.State.CONNECTED || Objects.requireNonNull(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).getState() == NetworkInfo.State.CONNECTED;
     }
 
-    // Show Error and Close Activity
+    // Show Error Message and Close Activity
     public static void showErrorWithActivityClose(final Activity a, String title, String message) {
         new FancyAlertDialog.Builder(a)
                 .setTitle(title)
@@ -51,7 +50,7 @@ public class Helpers {
                 .build();
     }
 
-    // Show Error
+    // Show Error Message
     public static void showError(Activity a, String title, String message) {
         new FancyAlertDialog.Builder(a)
                 .setTitle(title)
@@ -78,7 +77,7 @@ public class Helpers {
                 .build();
     }
 
-    // Show Error and Close Activity
+    // Show Success Message and Close Activity
     public static void showSuccessWithActivityClose(final Activity a, String title, String message) {
         new FancyAlertDialog.Builder(a)
                 .setTitle(title)
@@ -101,6 +100,32 @@ public class Helpers {
                     @Override
                     public void OnClick() {
                         a.finish();
+                    }
+                })
+                .build();
+    }
+
+    // Show Success Message
+    public static void showSuccess(final Activity a, String title, String message) {
+        new FancyAlertDialog.Builder(a)
+                .setTitle(title)
+                .setMessage(message)
+                .setBackgroundColor(a.getResources().getColor(R.color.colorPrimaryDark))
+                .setNegativeBtnText("CLOSE")
+                .setNegativeBtnBackground(a.getResources().getColor(R.color.colorDanger))
+                .setPositiveBtnText("OKAY")
+                .setPositiveBtnBackground(a.getResources().getColor(R.color.colorPrimary))
+                .setAnimation(Animation.POP)
+                .isCancellable(false)
+                .setIcon(R.drawable.ic_action_okay, Icon.Visible)
+                .OnPositiveClicked(new FancyAlertDialogListener() {
+                    @Override
+                    public void OnClick() {
+                    }
+                })
+                .OnNegativeClicked(new FancyAlertDialogListener() {
+                    @Override
+                    public void OnClick() {
                     }
                 })
                 .build();

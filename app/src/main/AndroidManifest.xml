@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kc.fyp.ecare">
-
     <!-- PERMISSIONS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,7 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <!-- Splash Activity -->
         <activity
             android:name=".activities.Splash"
@@ -46,6 +44,11 @@
         <!-- Forgot Password Activity -->
         <activity
             android:name=".activities.ForgotPassword"
+            android:parentActivityName=".activities.Login"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!-- OTP Verification Activity -->
+        <activity
+            android:name=".activities.OTPVerification"
             android:parentActivityName=".activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
