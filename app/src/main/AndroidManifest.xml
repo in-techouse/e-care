@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kc.fyp.ecare">
 
+    <!-- PERMISSIONS -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -11,12 +15,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Splash">
+        <!-- Splash Activity -->
+        <activity
+            android:name=".activities.Splash"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Login Activity -->
+        <activity
+            android:name=".activities.Login"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- Login via Email Activity -->
+        <activity
+            android:name=".activities.LoginViaEmail"
+            android:parentActivityName=".activities.Login"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- Registration Activity -->
+        <activity
+            android:name=".activities.Registration"
+            android:parentActivityName=".activities.Login"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- Forgot Password Activity -->
+        <activity
+            android:name=".activities.ForgotPassword"
+            android:parentActivityName=".activities.Login"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
     </application>
 

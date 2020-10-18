@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">E-Care</string>
+    <string name="app_intro">E-Care Mobile Application, Intro Line</string>
+    <string name="str_phone_number">Phone Number</string>
+    <string name="str_login_via_email">LOGIN via EMAIL</string>
+    <string name="str_forgot_password">Forgot Your Password? Click here to RECOVER</string>
+    <string name="str_registration">Don\'t have an Account? Click here to CREATE ONE</string>
 </resources>
