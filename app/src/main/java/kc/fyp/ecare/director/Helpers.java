@@ -64,6 +64,17 @@ public class Helpers {
                 .setAnimation(Animation.POP)
                 .isCancellable(false)
                 .setIcon(R.drawable.ic_action_close, Icon.Visible)
+                .OnPositiveClicked(new FancyAlertDialogListener() {
+                    @Override
+                    public void OnClick() {
+                    }
+                })
+                .OnNegativeClicked(new FancyAlertDialogListener() {
+                    @Override
+                    public void OnClick() {
+
+                    }
+                })
                 .build();
     }
 
