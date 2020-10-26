@@ -43,9 +43,11 @@
     <dimen name="txt26">26sp</dimen>
     <dimen name="txt28">28sp</dimen>
     <dimen name="txt30">30sp</dimen>
+
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">220dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="app_bar_height">440dp</dimen>
+    <dimen name="edit_profile_height">330dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 </resources>

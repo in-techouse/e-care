@@ -130,4 +130,6 @@
     <string name="title_activity_new_announcement">Add New Announcement</string>
     <string name="all_announcements">View Announcements</string>
     <string name="all_products">View Products</string>
+    <string name="action_save">SAVE</string>
+    <string name="action_update">UPDATE</string>
 </resources>
