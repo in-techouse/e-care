@@ -26,6 +26,7 @@
     <dimen name="mp45">45dp</dimen>
     <dimen name="mp47">47dp</dimen>
     <dimen name="mp50">50dp</dimen>
+    <dimen name="mp96">96dp</dimen>
 
     <dimen name="txt11">11sp</dimen>
     <dimen name="txt12">12sp</dimen>
@@ -43,7 +44,7 @@
     <dimen name="txt28">28sp</dimen>
     <dimen name="txt30">30sp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="nav_header_height">220dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
