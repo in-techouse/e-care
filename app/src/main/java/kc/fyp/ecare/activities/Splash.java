@@ -9,6 +9,8 @@ import android.util.Log;
 import com.rbddevs.splashy.Splashy;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.director.Session;
+import kc.fyp.ecare.models.User;
 
 public class Splash extends AppCompatActivity {
     private static final String TAG = "Splash";
@@ -21,25 +23,16 @@ public class Splash extends AppCompatActivity {
             @Override
             public void onComplete() {
                 Log.e(TAG, "OnComplete Call in onCreate");
-                Intent it = new Intent(Splash.this, Login.class);
+                Session session = new Session(Splash.this);
+                User user = session.getUser();
+                Intent it;
+                if (user == null) {
+                    it = new Intent(Splash.this, Login.class);
+                } else {
+                    it = new Intent(Splash.this, Dashboard.class);
+                }
                 startActivity(it);
                 finish();
-//                Session session = new Session(SplashActivity.this);
-//                User user = session.getUser();
-//                if (user == null) {
-//                    Intent It = new Intent(SplashActivity.this, LoginActivity.class);
-//                    startActivity(It);
-//                    finish();
-//                } else {
-//                    if (user.getType() == 0) {
-//                        Intent It = new Intent(SplashActivity.this, DashBoard.class);
-//                        startActivity(It);
-//                    } else {
-//                        Intent It = new Intent(SplashActivity.this, DriverDashboard.class);
-//                        startActivity(It);
-//                    }
-//                    finish();
-//                }
             }
         }.onComplete();
         setSplashy();

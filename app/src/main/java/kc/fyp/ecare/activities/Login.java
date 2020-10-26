@@ -76,6 +76,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         action_login.setBackground(getResources().getDrawable(R.drawable.rounded_button));
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         int id = view.getId();

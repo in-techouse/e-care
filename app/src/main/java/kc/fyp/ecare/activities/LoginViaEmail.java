@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -63,6 +64,7 @@ public class LoginViaEmail extends AppCompatActivity implements View.OnClickList
         edtPassword.setEnabled(true);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -89,6 +91,7 @@ public class LoginViaEmail extends AppCompatActivity implements View.OnClickList
                                             getUserDetailFromDatabase();
                                         } else {
                                             enableInput();
+                                            auth.getCurrentUser().sendEmailVerification();
                                             Helpers.showError(LoginViaEmail.this, Constants.LOGIN_FAILED, Constants.EMAIL_NOT_VERIFIED_ERROR);
                                             auth.signOut();
                                         }
@@ -121,7 +124,9 @@ public class LoginViaEmail extends AppCompatActivity implements View.OnClickList
                         user.setVerified(true);
                         session.setSession(user);
                         Log.e(TAG, "User Login is Successful");
-                        Helpers.showSuccess(LoginViaEmail.this, "LOGIN SUCCESS!", "Your login is successfull");
+                        Intent it = new Intent(LoginViaEmail.this, Dashboard.class);
+                        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(it);
                     } else {
                         enableInput();
                         auth.signOut();

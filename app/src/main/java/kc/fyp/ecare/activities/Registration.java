@@ -85,6 +85,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
         action_register.setBackground(getResources().getDrawable(R.drawable.rounded_button));
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         int id = view.getId();

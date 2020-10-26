@@ -35,6 +35,7 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
         action_send_recovery_email.setOnClickListener(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         int id = view.getId();

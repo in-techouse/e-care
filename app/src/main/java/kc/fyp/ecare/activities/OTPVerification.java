@@ -133,6 +133,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
         }.start();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -155,6 +156,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                     return;
                 }
                 if (firstPinView == null || firstPinView.getText() == null) {
+                    firstPinView.setError(Constants.ERROR_INVALID_OTP);
                     return;
                 }
                 String otp = firstPinView.getText().toString();
@@ -227,9 +229,12 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                                 user.setVerified(true);
                                 session.setSession(user);
                                 Log.e(TAG, "User Login is Successful");
-                                Helpers.showSuccess(OTPVerification.this, "LOGIN SUCCESS!", "Your login is successfull");
+                                Intent it = new Intent(OTPVerification.this, Dashboard.class);
+                                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(it);
                             } else {
                                 revertButton();
+                                auth.getCurrentUser().sendEmailVerification();
                                 Helpers.showError(OTPVerification.this, Constants.LOGIN_FAILED, Constants.EMAIL_NOT_VERIFIED_ERROR);
                                 auth.signOut();
                             }

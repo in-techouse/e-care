@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!-- Splash Activity -->
         <activity
             android:name=".activities.Splash"
@@ -23,24 +24,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!-- Login Activity -->
         <activity
             android:name=".activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <!-- Login via Email Activity -->
         <activity
             android:name=".activities.LoginViaEmail"
             android:parentActivityName=".activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <!-- Registration Activity -->
         <activity
             android:name=".activities.Registration"
             android:parentActivityName=".activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <!-- Forgot Password Activity -->
         <activity
             android:name=".activities.ForgotPassword"
@@ -51,7 +48,17 @@
             android:name=".activities.OTPVerification"
             android:parentActivityName=".activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
+        <!--  Dashboard Activity  -->
+        <activity
+            android:name=".activities.Dashboard"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--   Edit Profile Activity     -->
+        <activity
+            android:name=".activities.EditProfile"
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
