@@ -224,6 +224,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                             if (auth.getCurrentUser().isEmailVerified()) {
                                 // Set Session and move to Dashboard
                                 Session session = new Session(getApplicationContext());
+                                user.setVerified(true);
                                 session.setSession(user);
                                 Log.e(TAG, "User Login is Successful");
                                 Helpers.showSuccess(OTPVerification.this, "LOGIN SUCCESS!", "Your login is successfull");

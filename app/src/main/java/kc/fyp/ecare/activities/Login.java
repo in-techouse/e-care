@@ -233,6 +233,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             if (auth.getCurrentUser().isEmailVerified()) {
                                 // Set Session and move to Dashboard
                                 Session session = new Session(getApplicationContext());
+                                user.setVerified(true);
                                 session.setSession(user);
                                 Log.e(TAG, "User Login is Successful");
                                 Helpers.showSuccess(Login.this, "LOGIN SUCCESS!", "Your login is successfull");

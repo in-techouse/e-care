@@ -118,6 +118,7 @@ public class LoginViaEmail extends AppCompatActivity implements View.OnClickList
                         user = snapshot.getValue(User.class);
                         // Set Session and move to Dashboard
                         Session session = new Session(getApplicationContext());
+                        user.setVerified(true);
                         session.setSession(user);
                         Log.e(TAG, "User Login is Successful");
                         Helpers.showSuccess(LoginViaEmail.this, "LOGIN SUCCESS!", "Your login is successfull");
