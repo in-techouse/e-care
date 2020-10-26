@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,11 +37,12 @@ import kc.fyp.ecare.fragments.MyProductsFragment;
 import kc.fyp.ecare.models.User;
 import kc.fyp.ecare.ui.NoSwipeableViewPager;
 
-public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     public static final String TAG = "Dashboard";
     private DrawerLayout drawer;
     private NoSwipeableViewPager pager;
     private Session session;
+    private FloatingActionsMenu floatingActionsMenu;
     // Fragments
     private DashboardFragment dashboardFragment;
     private MyProductsFragment myProductsFragment;
@@ -55,15 +57,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -101,6 +94,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         email.setText(user.getEmail());
         phoneNumber.setText(user.getPhoneNumber());
 
+        floatingActionsMenu = findViewById(R.id.floatingActionsMenu);
+        FloatingActionButton newProduct = findViewById(R.id.newProduct);
+        FloatingActionButton newAnnouncements = findViewById(R.id.newAnnouncements);
+        newProduct.setOnClickListener(this);
+        newAnnouncements.setOnClickListener(this);
         initPushNotifications();
     }
 
@@ -161,6 +159,28 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         }
         drawer.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.newProduct: {
+                Log.e(TAG, "New Product Clicked");
+                floatingActionsMenu.collapse();
+                Intent it = new Intent(Dashboard.this, NewProduct.class);
+                startActivity(it);
+                break;
+            }
+            case R.id.newAnnouncements: {
+                Log.e(TAG, "New Announcements Clicked");
+                floatingActionsMenu.collapse();
+                Intent it = new Intent(Dashboard.this, NewAnnouncement.class);
+                startActivity(it);
+                break;
+            }
+        }
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {

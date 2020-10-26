@@ -26,7 +26,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="title_activity_edit_profile">ScrollingActivity</string>
+    <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -124,4 +124,10 @@
     <string name="menu_donations">My Donations</string>
     <string name="menu_notifications">My Notifications</string>
     <string name="menu_announcements">My Announcements</string>
+    <string name="add_product">All Product</string>
+    <string name="add_announcements">All Announcements</string>
+    <string name="title_activity_new_product">Add New Product</string>
+    <string name="title_activity_new_announcement">Add New Announcement</string>
+    <string name="all_announcements">View Announcements</string>
+    <string name="all_products">View Products</string>
 </resources>

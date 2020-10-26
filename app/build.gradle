@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url 'https://plugins.gradle.org/m2/'}
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.8'
@@ -28,7 +28,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         manifestPlaceholders = [
-                onesignal_app_id: '0794e1d8-e80a-43dc-9412-38fdf9f20b1d',
+                onesignal_app_id               : '0794e1d8-e80a-43dc-9412-38fdf9f20b1d',
                 // Project number pulled from dashboard, local value is ignored.
                 onesignal_google_project_number: 'REMOTE'
         ]
@@ -95,4 +95,6 @@ dependencies {
     implementation 'com.chaos.view:pinview:1.4.4'
     // OneSignal for Push Notifications
     implementation 'com.onesignal:OneSignal:3.15.4'
+    // Floating Action Buttons
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }
