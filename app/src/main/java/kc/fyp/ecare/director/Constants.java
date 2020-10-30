@@ -34,5 +34,6 @@ public class Constants {
     // Table Name
     public static final String USER_TABLE = "Users";
     public static final String DONATION_TABLE = "Donation";
+    public static final String NOTIFICATIONS_TABLE = "Notifications";
     public static final String ANNOUNCEMENT_TABLE = "Announcement";
 }
