@@ -43,7 +43,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/allProducts"
+        android:id="@+id/allDonations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/mp7"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/mp13"
-                android:text="@string/all_products"
+                android:text="@string/all_donation"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/txt20"
                 android:textStyle="bold" />

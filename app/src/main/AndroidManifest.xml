@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="kc.fyp.ecare">
     <!-- PERMISSIONS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/googleKey" />
         <!-- Splash Activity -->
         <activity
             android:name=".activities.Splash"
@@ -60,29 +71,34 @@
             android:parentActivityName=".activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--   Add New Announcement Activity -->
+        <!-- Add New Announcement Activity -->
         <activity
             android:name=".activities.NewAnnouncement"
             android:label="@string/title_activity_new_announcement"
             android:parentActivityName=".activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--   Add New Product Activity   -->
+        <!-- Add New Product Activity -->
         <activity
-            android:name=".activities.NewProduct"
+            android:name=".activities.NewDonation"
             android:label="@string/title_activity_new_product"
             android:parentActivityName=".activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--   All Products Activity   -->
+        <!-- All Products Activity -->
         <activity
-            android:name=".activities.AllProducts"
+            android:name=".activities.AllDonations"
             android:parentActivityName=".activities.Dashboard"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--   All Announcements Activity -->
+        <!-- All Announcements Activity -->
         <activity
             android:name=".activities.AllAnnouncements"
             android:parentActivityName=".activities.Dashboard"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--    Select Address    -->
+        <activity
+            android:name=".activities.SelectAddress"
+            android:parentActivityName=".activities.NewDonation"
             android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 

@@ -46,6 +46,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
     private CircularProgressButton action_verify_otp;
     private boolean isRegistration;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
     // Start Resend Timer
     private void startTimer() {
         action_resend.setEnabled(false);
-        new CountDownTimer(120000, 1000) {
+        countDownTimer = new CountDownTimer(120000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 millisUntilFinished = millisUntilFinished / 1000;
@@ -130,7 +131,8 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                 timer.setText("--:--");
                 action_resend.setEnabled(true);
             }
-        }.start();
+        };
+        countDownTimer.start();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -210,6 +212,9 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
                 revertButton();
+                countDownTimer.cancel();
+                timer.setText("--:--");
+                action_resend.setEnabled(true);
                 Helpers.showError(OTPVerification.this, Constants.PHONE_NUMBER_VERIFICATION, e.getMessage());
             }
         };

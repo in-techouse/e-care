@@ -2,6 +2,7 @@ package kc.fyp.ecare.director;
 
 public class Constants {
     public static final String LOGIN_FAILED = "LOGIN FAILED!";
+    public static final String ERROR = "ERROR!";
     public static final String NO_ACCOUNT_FOUND = "We can't found any account associated with this number. If you don't have an account please create one to continue.";
     public static final String REGISTRATION_FAILED = "REGISTRATION FAILED!";
     public static final String EXIT_CONFIRMATION = "EXIT CONFIRMATION!";
@@ -20,10 +21,18 @@ public class Constants {
     public static final String PHONE_NUMBER_ERROR = "Phone number is invalid";
     public static final String EMAIL_ERROR = "Email is invalid";
     public static final String NAME_ERROR = "Name is invalid";
+    public static final String QUANTITY_ERROR = "Quantity is invalid";
+    public static final String DESCRIPTION_ERROR = "Description is invalid";
     public static final String PASSWORD_ERROR = "Password is invalid";
     public static final String PASSWORD_CONFIRMATION_ERROR = "Password doesn't match";
     public static final String ERROR_INVALID_OTP = "OTP Code is invalid";
 
+
+    public static final String POSTED = "POSTED!";
+    public static final String DONATION_POSTED = "Your donation has been posted and live for the needy persons.";
+
     // Table Name
     public static final String USER_TABLE = "Users";
+    public static final String DONATION_TABLE = "Donation";
+    public static final String ANNOUNCEMENT_TABLE = "Announcement";
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SelectAddress">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/addressContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/mp3"
+        android:padding="@dimen/mp10"
+        app:cardElevation="@dimen/mp7">
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/mp7"
+            android:text="@string/select_address"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/txt15"
+            android:textStyle="bold" />
+
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/apply"
+        android:layout_below="@id/addressContainer"
+        tools:context=".activities.manager.AddressSelection" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:text="@string/apply"
+        android:textColor="@color/white" />
+</RelativeLayout>

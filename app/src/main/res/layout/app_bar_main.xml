@@ -44,7 +44,7 @@
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/colorWhite"
             fab:fab_size="mini"
-            fab:fab_title="@string/add_product" />
+            fab:fab_title="@string/add_donation" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/newAnnouncements"

@@ -27,6 +27,7 @@
     <dimen name="mp47">47dp</dimen>
     <dimen name="mp50">50dp</dimen>
     <dimen name="mp96">96dp</dimen>
+    <dimen name="mp250">350dp</dimen>
 
     <dimen name="txt11">11sp</dimen>
     <dimen name="txt12">12sp</dimen>

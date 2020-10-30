@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 
 import kc.fyp.ecare.R;
 import kc.fyp.ecare.activities.AllAnnouncements;
-import kc.fyp.ecare.activities.AllProducts;
+import kc.fyp.ecare.activities.AllDonations;
 
 public class DashboardFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = "DashboardFragment";
@@ -28,7 +28,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         RelativeLayout allAnnouncements = root.findViewById(R.id.allAnnouncements);
-        RelativeLayout allProducts = root.findViewById(R.id.allProducts);
+        RelativeLayout allProducts = root.findViewById(R.id.allDonations);
         allAnnouncements.setOnClickListener(this);
         allProducts.setOnClickListener(this);
         return root;
@@ -44,8 +44,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
                 startActivity(it);
                 break;
             }
-            case R.id.allProducts: {
-                Intent it = new Intent(getActivity(), AllProducts.class);
+            case R.id.allDonations: {
+                Intent it = new Intent(getActivity(), AllDonations.class);
                 startActivity(it);
                 break;
             }

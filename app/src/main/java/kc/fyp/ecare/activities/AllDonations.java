@@ -7,12 +7,12 @@ import android.view.MenuItem;
 
 import kc.fyp.ecare.R;
 
-public class AllProducts extends AppCompatActivity {
+public class AllDonations extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_products);
+        setContentView(R.layout.activity_all_donations);
     }
 
     @Override

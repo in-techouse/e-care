@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.onesignal.OneSignal;
@@ -33,7 +32,6 @@ import kc.fyp.ecare.fragments.DashboardFragment;
 import kc.fyp.ecare.fragments.MyAnnouncementsFragment;
 import kc.fyp.ecare.fragments.MyDonationsFragment;
 import kc.fyp.ecare.fragments.MyNotificationsFragment;
-import kc.fyp.ecare.fragments.MyProductsFragment;
 import kc.fyp.ecare.models.User;
 import kc.fyp.ecare.ui.NoSwipeableViewPager;
 
@@ -45,7 +43,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     private FloatingActionsMenu floatingActionsMenu;
     // Fragments
     private DashboardFragment dashboardFragment;
-    private MyProductsFragment myProductsFragment;
     private MyDonationsFragment myDonationsFragment;
     private MyNotificationsFragment myNotificationsFragment;
     private MyAnnouncementsFragment myAnnouncementsFragment;
@@ -68,7 +65,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
         // Initialize Fragments
         dashboardFragment = new DashboardFragment();
-        myProductsFragment = new MyProductsFragment();
         myDonationsFragment = new MyDonationsFragment();
         myAnnouncementsFragment = new MyAnnouncementsFragment();
         myNotificationsFragment = new MyNotificationsFragment();
@@ -123,20 +119,16 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 pager.setCurrentItem(0);
                 break;
             }
-            case R.id.nav_products: {
+            case R.id.nav_donations: {
                 pager.setCurrentItem(1);
                 break;
             }
-            case R.id.nav_donations: {
+            case R.id.nav_announcements: {
                 pager.setCurrentItem(2);
                 break;
             }
-            case R.id.nav_announcements: {
-                pager.setCurrentItem(3);
-                break;
-            }
             case R.id.nav_notifications: {
-                pager.setCurrentItem(4);
+                pager.setCurrentItem(3);
                 break;
             }
             case R.id.nav_profile: {
@@ -169,7 +161,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             case R.id.newProduct: {
                 Log.e(TAG, "New Product Clicked");
                 floatingActionsMenu.collapse();
-                Intent it = new Intent(Dashboard.this, NewProduct.class);
+                Intent it = new Intent(Dashboard.this, NewDonation.class);
                 startActivity(it);
                 break;
             }
@@ -197,15 +189,12 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     return dashboardFragment;
                 }
                 case 1: {
-                    return myProductsFragment;
-                }
-                case 2: {
                     return myDonationsFragment;
                 }
-                case 3: {
+                case 2: {
                     return myAnnouncementsFragment;
                 }
-                case 4: {
+                case 3: {
                     return myNotificationsFragment;
                 }
             }
@@ -214,7 +203,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
         @Override
         public int getCount() {
-            return 5;
+            return 4;
         }
     }
 }
