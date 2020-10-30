@@ -19,10 +19,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.activities.AllDonations;
+import kc.fyp.ecare.adapters.DonationAdapter;
 import kc.fyp.ecare.director.Constants;
+import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.Donation;
 import kc.fyp.ecare.models.User;
@@ -30,9 +35,10 @@ import kc.fyp.ecare.models.User;
 public class MyDonationsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.DONATION_TABLE);
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView donation;
+    private RecyclerView donations;
     private User user;
     private List<Donation> data;
+    private DonationAdapter donationAdapter;
 
     public MyDonationsFragment() {
         // Required empty public constructor
@@ -44,11 +50,13 @@ public class MyDonationsFragment extends Fragment implements SwipeRefreshLayout.
         View root = inflater.inflate(R.layout.fragment_my_donations, container, false);
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
-        donation = root.findViewById(R.id.donations);
+        donations = root.findViewById(R.id.donations);
         Session session = new Session(getActivity());
         user = session.getUser();
         data = new ArrayList<>();
-        donation.setLayoutManager(new LinearLayoutManager(getActivity()));
+        donations.setLayoutManager(new LinearLayoutManager(getActivity()));
+        donationAdapter = new DonationAdapter(getActivity());
+        donations.setAdapter(donationAdapter);
         loadData();
 
         return root;
@@ -57,15 +65,26 @@ public class MyDonationsFragment extends Fragment implements SwipeRefreshLayout.
     private void loadData() {
         swipeRefreshLayout.setRefreshing(true);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.orderByChild("userId").equalTo(user.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                if (snapshot.exists() && snapshot.hasChildren()) {
+                    for (DataSnapshot d : snapshot.getChildren()) {
+                        Donation donation = d.getValue(Donation.class);
+                        if (donation != null) {
+                            data.add(donation);
+                        }
+                    }
+                    Collections.reverse(data);
+                    donationAdapter.setData(data);
+                }
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                swipeRefreshLayout.setRefreshing(false);
+                Helpers.showError(getActivity(), Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         });
     }

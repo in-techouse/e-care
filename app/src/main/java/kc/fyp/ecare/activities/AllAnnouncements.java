@@ -20,6 +20,7 @@ import java.util.List;
 
 import kc.fyp.ecare.R;
 import kc.fyp.ecare.director.Constants;
+import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.Donation;
 
@@ -53,7 +54,8 @@ public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshL
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                swipeRefreshLayout.setRefreshing(true);
+                Helpers.showError(AllAnnouncements.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         };
         reference.addValueEventListener(listener);

@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.activities.AllDonations;
 import kc.fyp.ecare.director.Constants;
+import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.User;
@@ -65,7 +67,8 @@ public class MyAnnouncementsFragment extends Fragment implements SwipeRefreshLay
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                swipeRefreshLayout.setRefreshing(true);
+                Helpers.showError(getActivity(), Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         });
     }

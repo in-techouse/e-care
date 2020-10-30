@@ -16,10 +16,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.adapters.DonationAdapter;
 import kc.fyp.ecare.director.Constants;
+import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.models.Donation;
 
 public class AllDonations extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -28,6 +31,7 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView donations;
     private List<Donation> data;
+    private DonationAdapter donationAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
         donations = findViewById(R.id.donations);
         data = new ArrayList<>();
         donations.setLayoutManager(new LinearLayoutManager(AllDonations.this));
+        donationAdapter = new DonationAdapter(getApplicationContext());
+        donations.setAdapter(donationAdapter);
         loadData();
     }
 
@@ -47,12 +53,23 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                if (snapshot.exists() && snapshot.hasChildren()) {
+                    for (DataSnapshot d : snapshot.getChildren()) {
+                        Donation donation = d.getValue(Donation.class);
+                        if (donation != null) {
+                            data.add(donation);
+                        }
+                    }
+                    Collections.reverse(data);
+                    donationAdapter.setData(data);
+                }
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                swipeRefreshLayout.setRefreshing(false);
+                Helpers.showError(AllDonations.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         };
         reference.addValueEventListener(listener);

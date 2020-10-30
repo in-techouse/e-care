@@ -46,14 +46,17 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     private MyDonationsFragment myDonationsFragment;
     private MyNotificationsFragment myNotificationsFragment;
     private MyAnnouncementsFragment myAnnouncementsFragment;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("HOME");
         setSupportActionBar(toolbar);
+
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -116,18 +119,22 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         Log.e(TAG, "" + id);
         switch (id) {
             case R.id.nav_home: {
+                toolbar.setTitle("HOME");
                 pager.setCurrentItem(0);
                 break;
             }
             case R.id.nav_donations: {
+                toolbar.setTitle("MY DONATIONS");
                 pager.setCurrentItem(1);
                 break;
             }
             case R.id.nav_announcements: {
+                toolbar.setTitle("MY ANNOUNCEMENTS");
                 pager.setCurrentItem(2);
                 break;
             }
             case R.id.nav_notifications: {
+                toolbar.setTitle("MY NOTIFICATIONS");
                 pager.setCurrentItem(3);
                 break;
             }
