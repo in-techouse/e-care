@@ -39,10 +39,10 @@ import kc.fyp.ecare.models.User;
 public class Registration extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Registration";
     private EditText edtName, edtEmail, edtPhone, edtPassword, edtPasswordConfirmation;
-    private String strName, strEmail, strPhone, strPassword, strPasswordConfirmation;
+    private String strName, strEmail, strPhone, strPassword;
     private CountryCodePicker ccp;
     private CircularProgressButton action_register;
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private User user;
 
     @Override
@@ -122,7 +122,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
         strEmail = edtEmail.getText().toString();
         strPhone = ccp.getFullNumberWithPlus();
         strPassword = edtPassword.getText().toString();
-        strPasswordConfirmation = edtPasswordConfirmation.getText().toString();
+        String strPasswordConfirmation = edtPasswordConfirmation.getText().toString();
 
         if (strName.length() < 3) {
             edtName.setError(Constants.NAME_ERROR);

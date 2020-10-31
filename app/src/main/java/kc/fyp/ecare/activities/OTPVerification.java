@@ -48,6 +48,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private CountDownTimer countDownTimer;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

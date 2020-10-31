@@ -26,10 +26,9 @@ import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.models.Donation;
 
 public class AllDonations extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.DONATION_TABLE);
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.DONATION_TABLE);
     private ValueEventListener listener;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView donations;
     private List<Donation> data;
     private DonationAdapter donationAdapter;
 
@@ -39,7 +38,7 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_all_donations);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        donations = findViewById(R.id.donations);
+        RecyclerView donations = findViewById(R.id.donations);
         data = new ArrayList<>();
         donations.setLayoutManager(new LinearLayoutManager(AllDonations.this));
         donationAdapter = new DonationAdapter(getApplicationContext());
@@ -53,6 +52,7 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                data.clear();
                 if (snapshot.exists() && snapshot.hasChildren()) {
                     for (DataSnapshot d : snapshot.getChildren()) {
                         Donation donation = d.getValue(Donation.class);
@@ -60,9 +60,9 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
                             data.add(donation);
                         }
                     }
-                    Collections.reverse(data);
-                    donationAdapter.setData(data);
                 }
+                Collections.reverse(data);
+                donationAdapter.setData(data);
                 swipeRefreshLayout.setRefreshing(false);
             }
 

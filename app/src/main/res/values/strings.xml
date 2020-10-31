@@ -154,4 +154,7 @@
     </string>
     <string name="title_activity_donation_detail">Donation Detail</string>
     <string name="title_activity_announcement_detail">Announcement Detail</string>
+    <string name="announcement_name">Name</string>
+    <string name="announcement_description">Announcement Description</string>
+    <string name="required_at_address">Required at address</string>
 </resources>

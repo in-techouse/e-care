@@ -30,10 +30,11 @@ public class Constants {
 
     public static final String POSTED = "POSTED!";
     public static final String DONATION_POSTED = "Your donation has been posted and live for the needy persons.";
+    public static final String ANNOUNCEMENT_POSTED = "Your announcement has been posted and live for the other persons.";
 
     // Table Name
     public static final String USER_TABLE = "Users";
-    public static final String DONATION_TABLE = "Donation";
+    public static final String DONATION_TABLE = "Donations";
     public static final String NOTIFICATIONS_TABLE = "Notifications";
-    public static final String ANNOUNCEMENT_TABLE = "Announcement";
+    public static final String ANNOUNCEMENT_TABLE = "Announcements";
 }

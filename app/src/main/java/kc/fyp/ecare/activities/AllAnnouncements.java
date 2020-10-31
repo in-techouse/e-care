@@ -16,20 +16,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.adapters.AnnouncementAdapter;
 import kc.fyp.ecare.director.Constants;
 import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.Donation;
 
 public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.ANNOUNCEMENT_TABLE);
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.ANNOUNCEMENT_TABLE);
     private ValueEventListener listener;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView announcements;
     private List<Announcement> data;
+    private AnnouncementAdapter announcementAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +39,11 @@ public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshL
         setContentView(R.layout.activity_all_announcements);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        announcements = findViewById(R.id.announcements);
+        RecyclerView announcements = findViewById(R.id.announcements);
         data = new ArrayList<>();
         announcements.setLayoutManager(new LinearLayoutManager(AllAnnouncements.this));
+        announcementAdapter = new AnnouncementAdapter(getApplicationContext());
+        announcements.setAdapter(announcementAdapter);
         loadData();
     }
 
@@ -49,12 +53,23 @@ public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshL
         listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                data.clear();
+                if (snapshot.exists() && snapshot.hasChildren()) {
+                    for (DataSnapshot d : snapshot.getChildren()) {
+                        Announcement announcement = d.getValue(Announcement.class);
+                        if (announcement != null) {
+                            data.add(announcement);
+                        }
+                    }
+                }
+                Collections.reverse(data);
+                announcementAdapter.setData(data);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                swipeRefreshLayout.setRefreshing(true);
+                swipeRefreshLayout.setRefreshing(false);
                 Helpers.showError(AllAnnouncements.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         };

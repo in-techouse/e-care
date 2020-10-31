@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Donation implements Serializable {
-    private String id, userId, category, address, name, description, contact;
+    private String id, userId, category, address, name, description, contact, donatedTo;
     private double latitude, longitude;
     private int quantity;
     private List<String> images;
+    private boolean isDonated;
 
     public Donation() {
         images = new ArrayList<>();
+        isDonated = false;
+        donatedTo = "";
     }
 
-    public Donation(String id, String userId, String category, String address, String name, String description, String contact, double latitude, double longitude, int quantity, List<String> images) {
+    public Donation(String id, String userId, String category, String address, String name, String description, String contact, String donatedTo, double latitude, double longitude, int quantity, List<String> images, boolean isDonated) {
         this.id = id;
         this.userId = userId;
         this.category = category;
@@ -22,10 +25,12 @@ public class Donation implements Serializable {
         this.name = name;
         this.description = description;
         this.contact = contact;
+        this.donatedTo = donatedTo;
         this.latitude = latitude;
         this.longitude = longitude;
         this.quantity = quantity;
         this.images = images;
+        this.isDonated = isDonated;
     }
 
     public String getId() {
@@ -114,5 +119,21 @@ public class Donation implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public String getDonatedTo() {
+        return donatedTo;
+    }
+
+    public void setDonatedTo(String donatedTo) {
+        this.donatedTo = donatedTo;
+    }
+
+    public boolean isDonated() {
+        return isDonated;
+    }
+
+    public void setDonated(boolean donated) {
+        isDonated = donated;
     }
 }

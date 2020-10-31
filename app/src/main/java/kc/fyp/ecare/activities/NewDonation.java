@@ -56,9 +56,7 @@ import kc.fyp.ecare.models.User;
 
 public class NewDonation extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "NewDonation";
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.DONATION_TABLE);
-    private User user;
-    private Session session;
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.DONATION_TABLE);
     private Donation donation;
     private SliderAdapter adapter;
     private SliderView imageSlider;
@@ -86,8 +84,8 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
         }
 
         // Initialize all variables
-        session = new Session(NewDonation.this);
-        user = session.getUser();
+        Session session = new Session(NewDonation.this);
+        User user = session.getUser();
         donation = new Donation();
         String id = reference.push().getKey();
         donation.setId(id);

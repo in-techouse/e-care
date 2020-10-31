@@ -34,10 +34,10 @@ public class LoginViaEmail extends AppCompatActivity implements View.OnClickList
     private EditText edtEmail, edtPassword;
     private String strEmail, strPassword;
     private CircularProgressButton action_login;
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.USER_TABLE);
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.USER_TABLE);
     private User user;
     private ValueEventListener listener;
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

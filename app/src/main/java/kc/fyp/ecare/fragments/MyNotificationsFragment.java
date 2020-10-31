@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import kc.fyp.ecare.R;
@@ -29,9 +30,8 @@ import kc.fyp.ecare.models.Notification;
 import kc.fyp.ecare.models.User;
 
 public class MyNotificationsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.NOTIFICATIONS_TABLE);
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.NOTIFICATIONS_TABLE);
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView notifications;
     private User user;
     private List<Notification> data;
 
@@ -46,7 +46,7 @@ public class MyNotificationsFragment extends Fragment implements SwipeRefreshLay
         View root = inflater.inflate(R.layout.fragment_my_notifications, container, false);
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
-        notifications = root.findViewById(R.id.notifications);
+        RecyclerView notifications = root.findViewById(R.id.notifications);
         Session session = new Session(getActivity());
         user = session.getUser();
         data = new ArrayList<>();
@@ -59,10 +59,12 @@ public class MyNotificationsFragment extends Fragment implements SwipeRefreshLay
     private void loadData() {
         swipeRefreshLayout.setRefreshing(true);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.orderByChild("userId").equalTo(user.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                data.clear();
+                Collections.reverse(data);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override

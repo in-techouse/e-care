@@ -57,7 +57,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         toolbar.setTitle("HOME");
         setSupportActionBar(toolbar);
 
-
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

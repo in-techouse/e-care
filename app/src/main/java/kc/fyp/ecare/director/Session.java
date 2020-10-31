@@ -10,9 +10,9 @@ import com.google.gson.Gson;
 import kc.fyp.ecare.models.User;
 
 public class Session {
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
-    private Gson gson;
+    private final SharedPreferences preferences;
+    private final SharedPreferences.Editor editor;
+    private final Gson gson;
 
     @SuppressLint("CommitPrefEdits")
     public Session(Context c) {

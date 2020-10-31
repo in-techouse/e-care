@@ -26,7 +26,7 @@ import kc.fyp.ecare.models.Donation;
 public class DonationAdapter extends RecyclerView.Adapter<DonationAdapter.DonationHolder> {
     public static final String TAG = "DonationAdapter";
     private List<Donation> data;
-    private Context context;
+    private final Context context;
 
     public DonationAdapter(Context context) {
         data = new ArrayList<>();
@@ -51,6 +51,8 @@ public class DonationAdapter extends RecyclerView.Adapter<DonationAdapter.Donati
         if (donation.getImages() != null && donation.getImages().size() > 0) {
             Log.e(TAG, "Donation Image is loaded");
             Glide.with(context).load(donation.getImages().get(0)).into(holder.image);
+        } else {
+            holder.image.setVisibility(View.GONE);
         }
         holder.name.setText(donation.getName());
         holder.category.setText(donation.getCategory());

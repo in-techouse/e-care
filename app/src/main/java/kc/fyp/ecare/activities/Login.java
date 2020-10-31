@@ -45,7 +45,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private String strPhone;
     private CircularProgressButton action_login;
     private ValueEventListener listener;
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.USER_TABLE);
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.USER_TABLE);
     private User user;
 
     @Override

@@ -19,22 +19,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import kc.fyp.ecare.R;
 import kc.fyp.ecare.activities.AllDonations;
+import kc.fyp.ecare.adapters.AnnouncementAdapter;
 import kc.fyp.ecare.director.Constants;
 import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.Announcement;
+import kc.fyp.ecare.models.Donation;
 import kc.fyp.ecare.models.User;
 
 public class MyAnnouncementsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.ANNOUNCEMENT_TABLE);
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.ANNOUNCEMENT_TABLE);
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView announcements;
     private User user;
     private List<Announcement> data;
+    private AnnouncementAdapter announcementAdapter;
 
     public MyAnnouncementsFragment() {
         // Required empty public constructor
@@ -46,11 +49,13 @@ public class MyAnnouncementsFragment extends Fragment implements SwipeRefreshLay
         View root = inflater.inflate(R.layout.fragment_my_announcements, container, false);
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
-        announcements = root.findViewById(R.id.announcements);
+        RecyclerView announcements = root.findViewById(R.id.announcements);
         Session session = new Session(getActivity());
         user = session.getUser();
         data = new ArrayList<>();
         announcements.setLayoutManager(new LinearLayoutManager(getActivity()));
+        announcementAdapter = new AnnouncementAdapter(getActivity());
+        announcements.setAdapter(announcementAdapter);
         loadData();
 
         return root;
@@ -59,15 +64,26 @@ public class MyAnnouncementsFragment extends Fragment implements SwipeRefreshLay
     private void loadData() {
         swipeRefreshLayout.setRefreshing(true);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.orderByChild("userId").equalTo(user.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                data.clear();
+                if (snapshot.exists() && snapshot.hasChildren()) {
+                    for (DataSnapshot d : snapshot.getChildren()) {
+                        Announcement announcement = d.getValue(Announcement.class);
+                        if (announcement != null) {
+                            data.add(announcement);
+                        }
+                    }
+                }
+                Collections.reverse(data);
+                announcementAdapter.setData(data);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                swipeRefreshLayout.setRefreshing(true);
+                swipeRefreshLayout.setRefreshing(false);
                 Helpers.showError(getActivity(), Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         });
