@@ -14,13 +14,51 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
+        android:paddingStart="@dimen/mp20"
         android:paddingTop="@dimen/mp20"
+        android:paddingEnd="@dimen/mp20"
         android:paddingBottom="@dimen/mp96">
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit Profile Activity" />
+            android:layout_marginTop="@dimen/mp10"
+            android:hint="@string/your_name">
+
+            <EditText
+                android:id="@+id/edtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/mp10"
+            android:hint="@string/your_email">
+
+            <EditText
+                android:id="@+id/edtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/mp10"
+            android:hint="@string/your_phone_number">
+
+            <EditText
+                android:id="@+id/edtPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
