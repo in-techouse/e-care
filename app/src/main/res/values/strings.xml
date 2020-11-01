@@ -70,4 +70,10 @@
     <string name="announcement_description">Announcement Description</string>
     <string name="required_at_address">Required at address</string>
     <string name="description">Description</string>
+    <string name="announced_by">ANNOUNCED BY</string>
+    <string name="name">Name</string>
+    <string name="userName">Name</string>
+    <string name="donation_made_by">Donation Made By</string>
+    <string name="userEmail">Email</string>
+    <string name="userContact">Contact</string>
 </resources>

@@ -7,4 +7,6 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorDanger">#C84040</color>
+    <color name="colorSplashBg">#73C088</color>
+    <color name="screenBg">#E6FFEC</color>
 </resources>

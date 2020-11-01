@@ -1,17 +1,25 @@
 package kc.fyp.ecare.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,22 +29,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.director.Constants;
+import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.Donation;
 import kc.fyp.ecare.models.User;
 
-public class DonationDetail extends AppCompatActivity {
+public class DonationDetail extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "DonationDetail";
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private ValueEventListener userValueListener;
     private Donation donation;
     private List<String> donationImages;
-    private SliderAdapter adapter;
-    private SliderView imageSlider;
-    private TextView name, category, description, address;
+    private TextView userName, userEmail, userContact;
+    private ProgressBar userProgress;
+    private LinearLayout userLayout;
+    private User donationUser;
+    private CircleImageView userImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,28 +75,44 @@ public class DonationDetail extends AppCompatActivity {
         if (it == null) {
             Log.e(TAG, "Intent is null");
             finish();
+            return;
         }
         Bundle bundle = it.getExtras();
         if (bundle == null) {
             Log.e(TAG, "Bundle is null");
             finish();
+            return;
         }
         donation = (Donation) bundle.getSerializable("donation");
         if (donation == null) {
             Log.e(TAG, "Donation is null");
             finish();
+            return;
         }
 
         // Initialize all variables
         Session session = new Session(DonationDetail.this);
         User user = session.getUser();
-        imageSlider = findViewById(R.id.imageSlider);
-        name = findViewById(R.id.name);
-        category = findViewById(R.id.category);
-        description = findViewById(R.id.description);
-        address = findViewById(R.id.address);
+
+        // Donation Variables
+        SliderView imageSlider = findViewById(R.id.imageSlider);
+        TextView name = findViewById(R.id.name);
+        TextView category = findViewById(R.id.category);
+        TextView description = findViewById(R.id.description);
+        TextView address = findViewById(R.id.address);
+        TextView contact = findViewById(R.id.contact);
+
+        // User Variables
+        userProgress = findViewById(R.id.userProgress);
+        userLayout = findViewById(R.id.userLayout);
+        userName = findViewById(R.id.userName);
+        userImage = findViewById(R.id.userImage);
+        userEmail = findViewById(R.id.userEmail);
+        userContact = findViewById(R.id.userContact);
+        RelativeLayout callUser = findViewById(R.id.callUser);
+
         donationImages = donation.getImages();
-        adapter = new SliderAdapter();
+        SliderAdapter adapter = new SliderAdapter();
         imageSlider.setSliderAdapter(adapter);
         imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
@@ -87,10 +121,60 @@ public class DonationDetail extends AppCompatActivity {
         imageSlider.setScrollTimeInSec(4);
         imageSlider.startAutoCycle();
 
+        // Show Donation Detail
         name.setText(donation.getName());
         category.setText(donation.getCategory());
         description.setText(donation.getDescription());
         address.setText(donation.getAddress());
+        contact.setText(donation.getContact());
+
+        callUser.setOnClickListener(this);
+        // Load Donation Owner Detail
+        loadOwnerDetail();
+    }
+
+    private void loadOwnerDetail() {
+        userValueListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+                    donationUser = snapshot.getValue(User.class);
+                    if (donationUser != null) {
+                        userLayout.setVisibility(View.VISIBLE);
+                        userName.setText(donationUser.getName());
+                        userEmail.setText(donationUser.getEmail());
+                        userContact.setText(donationUser.getPhoneNumber());
+                        if (donationUser.getImage() != null && donationUser.getImage().length() > 0) {
+                            Glide.with(getApplicationContext()).load(donationUser.getImage()).into(userImage);
+                        }
+                    }
+                }
+                userProgress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Helpers.showError(DonationDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+                userProgress.setVisibility(View.GONE);
+            }
+        };
+        reference.child(Constants.USER_TABLE).child(donation.getUserId()).addValueEventListener(userValueListener);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.callUser: {
+                if (donationUser != null) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + donationUser.getPhoneNumber()));
+                    startActivity(intent);
+                }
+                break;
+            }
+        }
     }
 
     @Override
@@ -107,6 +191,17 @@ public class DonationDetail extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (userValueListener != null) {
+            reference.child(Constants.USER_TABLE).child(donation.getUserId()).removeEventListener(userValueListener);
+        }
+        if (userValueListener != null) {
+            reference.removeEventListener(userValueListener);
+        }
     }
 
     private class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {

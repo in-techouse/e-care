@@ -1,5 +1,6 @@
 package kc.fyp.ecare.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -9,10 +10,16 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -22,23 +29,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.director.Constants;
+import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.Donation;
 import kc.fyp.ecare.models.User;
 
-public class AnnouncementDetail extends AppCompatActivity {
+public class AnnouncementDetail extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "AnnouncementDetail";
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private ValueEventListener userValueListener;
     private Announcement announcement;
     private List<String> announcementImages;
-    private SliderAdapter adapter;
-    private SliderView imageSlider;
-    private TextView name, category, description, address;
+    private TextView userName, userEmail, userContact;
+    private ProgressBar userProgress;
+    private LinearLayout userLayout;
+    private User announcementUser;
+    private CircleImageView userImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,28 +76,44 @@ public class AnnouncementDetail extends AppCompatActivity {
         if (it == null) {
             Log.e(TAG, "Intent is null");
             finish();
+            return;
         }
         Bundle bundle = it.getExtras();
         if (bundle == null) {
             Log.e(TAG, "Bundle is null");
             finish();
+            return;
         }
         announcement = (Announcement) bundle.getSerializable("announcement");
         if (announcement == null) {
             Log.e(TAG, "Announcement is null");
             finish();
+            return;
         }
 
         // Initialize all variables
         Session session = new Session(AnnouncementDetail.this);
         User user = session.getUser();
-        imageSlider = findViewById(R.id.imageSlider);
-        name = findViewById(R.id.name);
-        category = findViewById(R.id.category);
-        description = findViewById(R.id.description);
-        address = findViewById(R.id.address);
+
+        // Announcement Variables
+        SliderView imageSlider = findViewById(R.id.imageSlider);
+        TextView name = findViewById(R.id.name);
+        TextView category = findViewById(R.id.category);
+        TextView description = findViewById(R.id.description);
+        TextView address = findViewById(R.id.address);
+        TextView contact = findViewById(R.id.contact);
+
+        // User Variables
+        userProgress = findViewById(R.id.userProgress);
+        userLayout = findViewById(R.id.userLayout);
+        userName = findViewById(R.id.userName);
+        userImage = findViewById(R.id.userImage);
+        userEmail = findViewById(R.id.userEmail);
+        userContact = findViewById(R.id.userContact);
+        RelativeLayout callUser = findViewById(R.id.callUser);
+
         announcementImages = announcement.getImages();
-        adapter = new SliderAdapter();
+        SliderAdapter adapter = new SliderAdapter();
         imageSlider.setSliderAdapter(adapter);
         imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
@@ -89,10 +122,60 @@ public class AnnouncementDetail extends AppCompatActivity {
         imageSlider.setScrollTimeInSec(4);
         imageSlider.startAutoCycle();
 
+        // Show Announcement Detail
         name.setText(announcement.getName());
         category.setText(announcement.getCategory());
         description.setText(announcement.getDescription());
         address.setText(announcement.getAddress());
+        contact.setText(announcement.getContact());
+
+        callUser.setOnClickListener(this);
+        // Load Announcement Owner Detail
+        loadOwnerDetail();
+    }
+
+    private void loadOwnerDetail() {
+        userValueListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+                    announcementUser = snapshot.getValue(User.class);
+                    if (announcementUser != null) {
+                        userLayout.setVisibility(View.VISIBLE);
+                        userName.setText(announcementUser.getName());
+                        userEmail.setText(announcementUser.getEmail());
+                        userContact.setText(announcementUser.getPhoneNumber());
+                        if (announcementUser.getImage() != null && announcementUser.getImage().length() > 0) {
+                            Glide.with(getApplicationContext()).load(announcementUser.getImage()).into(userImage);
+                        }
+                    }
+                }
+                userProgress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Helpers.showError(AnnouncementDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+                userProgress.setVisibility(View.GONE);
+            }
+        };
+        reference.child(Constants.USER_TABLE).child(announcement.getUserId()).addValueEventListener(userValueListener);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.callUser: {
+                if (announcementUser != null) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + announcementUser.getPhoneNumber()));
+                    startActivity(intent);
+                }
+                break;
+            }
+        }
     }
 
     @Override
@@ -109,6 +192,17 @@ public class AnnouncementDetail extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (userValueListener != null) {
+            reference.child(Constants.USER_TABLE).child(announcement.getUserId()).removeEventListener(userValueListener);
+        }
+        if (userValueListener != null) {
+            reference.removeEventListener(userValueListener);
+        }
     }
 
     private class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {

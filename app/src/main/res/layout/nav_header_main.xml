@@ -16,7 +16,7 @@
         android:layout_width="@dimen/mp96"
         android:layout_height="@dimen/mp96"
         android:src="@drawable/user"
-        app:civ_border_color="@color/colorWhite"
+        app:civ_border_color="@color/colorPrimaryDark"
         app:civ_border_width="@dimen/mp3" />
 
     <TextView
