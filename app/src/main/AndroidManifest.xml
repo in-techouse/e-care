@@ -33,7 +33,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Login Activity -->
+        </activity>
+        <!-- Login Activity -->
         <activity
             android:name=".activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
@@ -99,17 +100,22 @@
             android:name=".activities.SelectAddress"
             android:parentActivityName=".activities.NewDonation"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--   Donation Detail Activity    -->
+        <!-- Donation Detail Activity -->
         <activity
             android:name=".activities.DonationDetail"
             android:label="@string/title_activity_donation_detail"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--   Announcement Detail Activity    -->
+        <!-- Announcement Detail Activity -->
         <activity
             android:name=".activities.AnnouncementDetail"
             android:label="@string/title_activity_announcement_detail"
             android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--    Make a request for Donation    -->
+        <activity
+            android:name=".activities.MakeRequest"
+            android:parentActivityName=".activities.DonationDetail"
             android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 

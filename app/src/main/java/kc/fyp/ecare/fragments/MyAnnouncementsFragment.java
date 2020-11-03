@@ -49,6 +49,7 @@ public class MyAnnouncementsFragment extends Fragment implements SwipeRefreshLay
         View root = inflater.inflate(R.layout.fragment_my_announcements, container, false);
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView announcements = root.findViewById(R.id.announcements);
         Session session = new Session(getActivity());
         user = session.getUser();

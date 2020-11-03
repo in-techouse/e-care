@@ -76,4 +76,5 @@
     <string name="donation_made_by">Donation Made By</string>
     <string name="userEmail">Email</string>
     <string name="userContact">Contact</string>
+    <string name="make_request">MAKE REQUEST TO GET THIS DONATION</string>
 </resources>

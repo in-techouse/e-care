@@ -23,6 +23,8 @@ public class Splash extends AppCompatActivity {
             @Override
             public void onComplete() {
                 Log.e(TAG, "OnComplete Call in onCreate");
+                // Check User Session.
+                // If user is logged in, take the user to dashboard, otherwise take the user on LoginScreen.
                 Session session = new Session(Splash.this);
                 User user = session.getUser();
                 Intent it;

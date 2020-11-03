@@ -38,6 +38,7 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_all_donations);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView donations = findViewById(R.id.donations);
         data = new ArrayList<>();
         donations.setLayoutManager(new LinearLayoutManager(AllDonations.this));

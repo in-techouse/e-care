@@ -39,6 +39,7 @@ public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshL
         setContentView(R.layout.activity_all_announcements);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView announcements = findViewById(R.id.announcements);
         data = new ArrayList<>();
         announcements.setLayoutManager(new LinearLayoutManager(AllAnnouncements.this));

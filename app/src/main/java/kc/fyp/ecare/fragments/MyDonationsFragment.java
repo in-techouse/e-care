@@ -49,6 +49,7 @@ public class MyDonationsFragment extends Fragment implements SwipeRefreshLayout.
         View root = inflater.inflate(R.layout.fragment_my_donations, container, false);
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView donations = root.findViewById(R.id.donations);
         Session session = new Session(getActivity());
         user = session.getUser();

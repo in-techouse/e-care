@@ -13,6 +13,8 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.onesignal.OSNotification;
+import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
 
 import androidx.annotation.NonNull;
@@ -33,14 +35,16 @@ import kc.fyp.ecare.fragments.MyAnnouncementsFragment;
 import kc.fyp.ecare.fragments.MyDonationsFragment;
 import kc.fyp.ecare.fragments.MyNotificationsFragment;
 import kc.fyp.ecare.models.User;
+import kc.fyp.ecare.services.NotificationService;
 import kc.fyp.ecare.ui.NoSwipeableViewPager;
 
-public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, OneSignal.NotificationReceivedHandler, OneSignal.NotificationOpenedHandler {
     public static final String TAG = "Dashboard";
     private DrawerLayout drawer;
     private NoSwipeableViewPager pager;
     private Session session;
     private FloatingActionsMenu floatingActionsMenu;
+    private User user;
     // Fragments
     private DashboardFragment dashboardFragment;
     private MyDonationsFragment myDonationsFragment;
@@ -77,7 +81,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         pager.setAdapter(adapter);
 
         session = new Session(getApplicationContext());
-        User user = session.getUser();
+        user = session.getUser();
         View header = navigationView.getHeaderView(0);
 
         CircleImageView imageView = header.findViewById(R.id.imageView);
@@ -108,7 +112,15 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
+                .setNotificationReceivedHandler(this)
+                .setNotificationOpenedHandler(this)
                 .init();
+        OneSignal.promptLocation();
+        OneSignal.sendTag("id", user.getId());
+        OneSignal.sendTag("email", user.getEmail());
+        OneSignal.sendTag("phoneNumber", user.getPhoneNumber());
+
+        NotificationService.sendNotificationToAllUsers(getApplicationContext(), "Hello User", "test", user.getId());
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -179,6 +191,16 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 break;
             }
         }
+    }
+
+    @Override
+    public void notificationOpened(OSNotificationOpenResult result) {
+        Log.e(TAG, "Notification Opened");
+    }
+
+    @Override
+    public void notificationReceived(OSNotification notification) {
+        Log.e(TAG, "Notification Received");
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {

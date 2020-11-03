@@ -46,6 +46,7 @@ public class MyNotificationsFragment extends Fragment implements SwipeRefreshLay
         View root = inflater.inflate(R.layout.fragment_my_notifications, container, false);
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView notifications = root.findViewById(R.id.notifications);
         Session session = new Session(getActivity());
         user = session.getUser();

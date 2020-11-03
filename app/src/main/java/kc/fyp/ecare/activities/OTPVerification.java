@@ -45,7 +45,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
     private TextView timer, action_resend;
     private CircularProgressButton action_verify_otp;
     private boolean isRegistration;
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private CountDownTimer countDownTimer;
 
     @SuppressLint("SetTextI18n")
@@ -147,7 +147,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                     Helpers.showError(OTPVerification.this, Constants.REGISTRATION_FAILED, Constants.NO_INTERNET);
                     return;
                 }
-                action_verify_otp.startAnimation();
+                action_verify_otp.startAnimation(); // This line will convert the button to circular progress bar
                 // Send OTP Again
                 sendOtpAgain();
                 break;
@@ -158,6 +158,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                     Helpers.showError(OTPVerification.this, Constants.REGISTRATION_FAILED, Constants.NO_INTERNET);
                     return;
                 }
+                // Check the user have entered the OTP code or not.
                 if (firstPinView == null || firstPinView.getText() == null) {
                     firstPinView.setError(Constants.ERROR_INVALID_OTP);
                     return;
@@ -167,13 +168,14 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                     firstPinView.setError(Constants.ERROR_INVALID_OTP);
                     return;
                 }
-                action_verify_otp.startAnimation();
+                // If the user entered the OTP, verify it from Firebase.
+                action_verify_otp.startAnimation(); // This line will convert the button to circular progress bar
                 firstPinView.setError(null);
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, otp);
-                if (isRegistration) {
+                if (isRegistration) { // User is in the Registration Process, Register the user
                     // Link User Account with Phone Number
                     linkWithPhoneNumber(credential);
-                } else {
+                } else { // The user is already registered, the app should have to logged in the user
                     signInUser(credential);
                 }
                 break;
@@ -191,7 +193,8 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             public void onCodeSent(@NonNull String vId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
                 // Show Sent OTP Success Message
-                revertButton();
+                revertButton(); // Convert the circular progress bar to button again.
+                // Restart the Timer.
                 verificationId = vId;
                 resendToken = forceResendingToken;
                 startTimer();
@@ -201,10 +204,10 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                if (isRegistration) {
+                if (isRegistration) { // User is in the Registration Process, Register the user
                     // Link User Account with Phone Number
                     linkWithPhoneNumber(phoneAuthCredential);
-                } else {
+                } else { // The user is already registered, the app should have to logged in the user
                     signInUser(phoneAuthCredential);
                 }
             }
@@ -212,7 +215,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-                revertButton();
+                revertButton(); // Convert the circular progress bar to button again.
                 countDownTimer.cancel();
                 timer.setText("--:--");
                 action_resend.setEnabled(true);

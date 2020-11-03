@@ -54,4 +54,21 @@
 
     <include layout="@layout/content_donation_detail" />
 
+    <LinearLayout
+        android:id="@+id/makeRequestUpper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/makeRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/make_request"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

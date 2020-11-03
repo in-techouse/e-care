@@ -21,6 +21,7 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
@@ -111,6 +112,9 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
         userContact = findViewById(R.id.userContact);
         RelativeLayout callUser = findViewById(R.id.callUser);
 
+        LinearLayout makeRequestUpper = findViewById(R.id.makeRequestUpper);
+        AppCompatButton makeRequest = findViewById(R.id.makeRequest);
+
         donationImages = donation.getImages();
         SliderAdapter adapter = new SliderAdapter();
         imageSlider.setSliderAdapter(adapter);
@@ -129,6 +133,11 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
         contact.setText(donation.getContact());
 
         callUser.setOnClickListener(this);
+        makeRequest.setOnClickListener(this);
+
+        if (user.getId().equals(donation.getUserId())) {
+            makeRequestUpper.setVisibility(View.GONE);
+        }
         // Load Donation Owner Detail
         loadOwnerDetail();
     }
@@ -172,6 +181,15 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
                     intent.setData(Uri.parse("tel:" + donationUser.getPhoneNumber()));
                     startActivity(intent);
                 }
+                break;
+            }
+            case R.id.makeRequest: {
+                Intent it = new Intent(DonationDetail.this, MakeRequest.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("donation", donation);
+                bundle.putSerializable("donationUser", donationUser);
+                it.putExtras(bundle);
+                startActivity(it);
                 break;
             }
         }

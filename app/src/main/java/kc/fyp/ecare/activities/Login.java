@@ -94,7 +94,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     return;
                 }
                 Log.e(TAG, "Phone Number is valid");
-                action_login.startAnimation();
+                action_login.startAnimation(); // This line will convert the button to circular progress bar
                 edtPhone.setError(null);
                 strPhone = ccp.getFullNumberWithPlus();
                 // Check user from Database
@@ -102,16 +102,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 break;
             }
             case R.id.action_login_via_email: {
+                // Start the Login via Email Activity
                 Intent it = new Intent(Login.this, LoginViaEmail.class);
                 startActivity(it);
                 break;
             }
             case R.id.action_forgot_password: {
+                // Start the Forgot Password Activity
                 Intent it = new Intent(Login.this, ForgotPassword.class);
                 startActivity(it);
                 break;
             }
             case R.id.action_registration: {
+                // Start the Registration Activity
                 Intent it = new Intent(Login.this, Registration.class);
                 startActivity(it);
                 break;
@@ -133,10 +136,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         sendOtp();
                     } else {
                         revertAnimation();
+                        // Show user an error that, no account is found related to the entered number.
                         Helpers.showError(Login.this, Constants.LOGIN_FAILED, Constants.NO_ACCOUNT_FOUND);
                     }
                 } else {
                     revertAnimation();
+                    // Show user an error that, no account is found related to the entered number.
                     Helpers.showError(Login.this, Constants.LOGIN_FAILED, Constants.NO_ACCOUNT_FOUND);
                 }
             }
@@ -173,6 +178,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
                 revertAnimation();
+                // Send OTP failed, show user an error.
                 Helpers.showError(Login.this, Constants.LOGIN_FAILED, e.getMessage());
             }
         };
