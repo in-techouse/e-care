@@ -5,17 +5,21 @@ import java.io.Serializable;
 public class User implements Serializable {
     private String id, name, email, phoneNumber, image;
     private boolean isVerified;
+    private double rating;
 
     public User() {
+        isVerified = false;
+        rating = 0;
     }
 
-    public User(String id, String name, String email, String phoneNumber, String image, boolean isVerified) {
+    public User(String id, String name, String email, String phoneNumber, String image, boolean isVerified, double rating) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.image = image;
         this.isVerified = isVerified;
+        this.rating = rating;
     }
 
     public String getId() {
@@ -64,5 +68,13 @@ public class User implements Serializable {
 
     public void setVerified(boolean verified) {
         isVerified = verified;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

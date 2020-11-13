@@ -57,7 +57,7 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
                 if (snapshot.exists() && snapshot.hasChildren()) {
                     for (DataSnapshot d : snapshot.getChildren()) {
                         Donation donation = d.getValue(Donation.class);
-                        if (donation != null) {
+                        if (donation != null && !donation.isDonated() && donation.getDonatedTo().length() < 1) {
                             data.add(donation);
                         }
                     }

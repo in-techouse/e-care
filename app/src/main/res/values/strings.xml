@@ -77,4 +77,8 @@
     <string name="userEmail">Email</string>
     <string name="userContact">Contact</string>
     <string name="make_request">MAKE REQUEST TO GET THIS DONATION</string>
+    <string name="person_name">Your name</string>
+    <string name="request_description">Request Description</string>
+    <string name="action_send_request">SEND REQUEST</string>
+    <string name="donation_detail">DONATION DETAIL</string>
 </resources>

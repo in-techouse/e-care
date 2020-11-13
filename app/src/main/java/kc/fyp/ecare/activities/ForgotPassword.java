@@ -32,6 +32,7 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
 
         edtEmail = findViewById(R.id.edtEmail);
         action_send_recovery_email = findViewById(R.id.action_send_recovery_email);
+        // Set Click Listener on Button
         action_send_recovery_email.setOnClickListener(this);
     }
 
@@ -53,7 +54,7 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
                 edtEmail.setError(null);
-                action_send_recovery_email.startAnimation();
+                action_send_recovery_email.startAnimation(); // Convert button to progress bar
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.sendPasswordResetEmail(strEmail)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

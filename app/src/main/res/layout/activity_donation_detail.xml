@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     android:fitsSystemWindows="true"
     tools:context=".activities.DonationDetail">
 
@@ -59,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatButton

@@ -60,27 +60,34 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
 
         ccp.registerCarrierNumberEditText(edtPhone);
 
+        // Set Click Listener on Register Button
         action_register.setOnClickListener(this);
     }
 
+    // Function to disable all inputs, and start progress
     private void disableInputs() {
+        // Disable all inputs
         edtName.setEnabled(false);
         edtEmail.setEnabled(false);
         ccp.setEnabled(false);
         edtPhone.setEnabled(false);
         edtPassword.setEnabled(false);
         edtPasswordConfirmation.setEnabled(false);
+        // Start button progress
         action_register.startAnimation();
     }
 
+    // Enable all inputs, and stop the progress
     @SuppressLint("UseCompatLoadingForDrawables")
     private void enableInputs() {
+        // Enable all inputs
         edtName.setEnabled(true);
         edtEmail.setEnabled(true);
         ccp.setEnabled(true);
         edtPhone.setEnabled(true);
         edtPassword.setEnabled(true);
         edtPasswordConfirmation.setEnabled(true);
+        // Stop progress of button
         action_register.revertAnimation();
         action_register.setBackground(getResources().getDrawable(R.drawable.rounded_button));
     }
@@ -97,9 +104,9 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 // Check if data is valid or not
-                boolean flag = isValid();
+                boolean flag = isValid(); // Function to check, all values are valid or not
                 if (flag) {
-                    disableInputs();
+                    disableInputs(); // Function to disable all inputs, and start progress
                     // Set User Detail
                     user = new User();
                     user.setId("");
@@ -116,6 +123,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // Function to check, all values are valid or not
     private boolean isValid() {
         boolean flag = true;
         strName = edtName.getText().toString();
@@ -168,12 +176,12 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        if (auth.getCurrentUser() != null) {
-                            user.setId(auth.getCurrentUser().getUid());
+                        if (auth.getCurrentUser() != null) { // Registration is successful
+                            user.setId(auth.getCurrentUser().getUid()); // Set user id
                             // Send Verification OTP
                             sendOtp();
-                        } else {
-                            enableInputs();
+                        } else { // Registration failed
+                            enableInputs(); // Enable all inputs, and stop the progress
                             Helpers.showError(Registration.this, Constants.REGISTRATION_FAILED, Constants.SOMETHING_WENT_WRONG);
                         }
                     }
@@ -181,7 +189,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        enableInputs();
+                        enableInputs(); // Enable all inputs, and stop the progress
                         Helpers.showError(Registration.this, Constants.REGISTRATION_FAILED, e.getMessage());
                     }
                 });
@@ -195,7 +203,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
-                enableInputs();
+                enableInputs(); // Enable all inputs, and stop the progress
                 // Show Sent OTP Success Message
                 showOTPSuccess(Constants.PHONE_NUMBER_VERIFICATION, Constants.OTP_SENT + user.getPhoneNumber(), verificationId, forceResendingToken);
             }
@@ -208,7 +216,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-                enableInputs();
+                enableInputs(); // Enable all inputs, and stop the progress
                 Helpers.showError(Registration.this, Constants.REGISTRATION_FAILED, e.getMessage());
             }
         };

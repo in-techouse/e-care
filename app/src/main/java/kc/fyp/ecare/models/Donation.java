@@ -10,14 +10,16 @@ public class Donation implements Serializable {
     private int quantity;
     private List<String> images;
     private boolean isDonated;
+    private long timestamps;
 
     public Donation() {
         images = new ArrayList<>();
         isDonated = false;
         donatedTo = "";
+        timestamps = 0;
     }
 
-    public Donation(String id, String userId, String category, String address, String name, String description, String contact, String donatedTo, double latitude, double longitude, int quantity, List<String> images, boolean isDonated) {
+    public Donation(String id, String userId, String category, String address, String name, String description, String contact, String donatedTo, double latitude, double longitude, int quantity, List<String> images, boolean isDonated, long timestamps) {
         this.id = id;
         this.userId = userId;
         this.category = category;
@@ -31,6 +33,7 @@ public class Donation implements Serializable {
         this.quantity = quantity;
         this.images = images;
         this.isDonated = isDonated;
+        this.timestamps = timestamps;
     }
 
     public String getId() {
@@ -89,6 +92,14 @@ public class Donation implements Serializable {
         this.contact = contact;
     }
 
+    public String getDonatedTo() {
+        return donatedTo;
+    }
+
+    public void setDonatedTo(String donatedTo) {
+        this.donatedTo = donatedTo;
+    }
+
     public double getLatitude() {
         return latitude;
     }
@@ -121,19 +132,19 @@ public class Donation implements Serializable {
         this.images = images;
     }
 
-    public String getDonatedTo() {
-        return donatedTo;
-    }
-
-    public void setDonatedTo(String donatedTo) {
-        this.donatedTo = donatedTo;
-    }
-
     public boolean isDonated() {
         return isDonated;
     }
 
     public void setDonated(boolean donated) {
         isDonated = donated;
+    }
+
+    public long getTimestamps() {
+        return timestamps;
+    }
+
+    public void setTimestamps(long timestamps) {
+        this.timestamps = timestamps;
     }
 }
