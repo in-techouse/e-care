@@ -26,10 +26,14 @@ import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.models.Donation;
 
 public class AllDonations extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    // Create firebase database reference, to fetch all the announcements from Firebase database.
     private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.DONATION_TABLE);
+    // Firebase Value Event listener, used to fetched data from firebase database, along with firebase database reference.
     private ValueEventListener listener;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    // A list of donations, to save the donations data, temporarily.
     private List<Donation> data;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    // The purpose of adapter is to show all the loaded data in the recycler view.
     private DonationAdapter donationAdapter;
 
     @Override
@@ -37,23 +41,32 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_donations);
 
+        // Find view by id, all widgets.
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView donations = findViewById(R.id.donations);
+        // Set swipeRefreshLayout, refresh listener.
+        swipeRefreshLayout.setOnRefreshListener(this);
         data = new ArrayList<>();
+        // Set recycler view properties to display the data to user.
         donations.setLayoutManager(new LinearLayoutManager(AllDonations.this));
         donationAdapter = new DonationAdapter(getApplicationContext());
         donations.setAdapter(donationAdapter);
+        // Fetch all donations from firebase database.
         loadData();
     }
 
+    // Fetch all donations from firebase database.
     private void loadData() {
+        // Show loading bar
         swipeRefreshLayout.setRefreshing(true);
 
         listener = new ValueEventListener() {
+            // Data is loaded successfully.
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Clear the data list.
                 data.clear();
+                // Insert all the loaded donations, to data list.
                 if (snapshot.exists() && snapshot.hasChildren()) {
                     for (DataSnapshot d : snapshot.getChildren()) {
                         Donation donation = d.getValue(Donation.class);
@@ -62,20 +75,26 @@ public class AllDonations extends AppCompatActivity implements SwipeRefreshLayou
                         }
                     }
                 }
+                // Reverse the data list, so that the latest donation should display on top.
                 Collections.reverse(data);
                 donationAdapter.setData(data);
+                // Hide the loading bar.
                 swipeRefreshLayout.setRefreshing(false);
             }
 
+            // Data is loading failed.
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Hide the loading bar.
                 swipeRefreshLayout.setRefreshing(false);
+                // Show an error to user.
                 Helpers.showError(AllDonations.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         };
         reference.addValueEventListener(listener);
     }
 
+    // SwipeRefreshLayout, refresh listener.
     @Override
     public void onRefresh() {
         loadData();

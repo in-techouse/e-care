@@ -1,6 +1,8 @@
 package kc.fyp.ecare.director;
 
 public class Constants {
+    // This file contains all the error messages, success message and table name used in the application
+
     public static final String LOGIN_FAILED = "LOGIN FAILED!";
     public static final String ERROR = "ERROR!";
     public static final String NO_ACCOUNT_FOUND = "We can't found any account associated with this number. If you don't have an account please create one to continue.";

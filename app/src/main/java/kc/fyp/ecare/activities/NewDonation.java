@@ -56,16 +56,23 @@ import kc.fyp.ecare.models.User;
 
 public class NewDonation extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "NewDonation";
+    // Firebase database reference, to save the new donations data to database.
     private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.DONATION_TABLE);
+    // Model class, for announcement
     private Donation donation;
+    // To show selected images in adapter.
     private SliderAdapter adapter;
+    // From XML file
     private SliderView imageSlider;
+    // To store the user selected images, temporarily.
     private List<Uri> donationImages;
+    // Button
     private CircularProgressButton action_save;
     private RelativeLayout selectAddress;
     private Spinner category;
     private TextView address;
     private EditText edtName, edtQuantity, edtDescription, edtContact;
+    // To open gallery
     private FloatingActionButton fab;
 
     @Override
@@ -85,13 +92,15 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
 
         // Initialize all variables
         Session session = new Session(NewDonation.this);
-        User user = session.getUser();
+        User user = session.getUser(); // Get value of current logged in user.
         donation = new Donation();
+        // Get id of donation from firebase database.
         String id = reference.push().getKey();
         donation.setId(id);
         donation.setUserId(user.getId());
         donationImages = new ArrayList<>();
 
+        // Find view by id all widgets
         fab = findViewById(R.id.fab);
         action_save = findViewById(R.id.action_save);
         imageSlider = findViewById(R.id.imageSlider);
@@ -102,10 +111,13 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
         edtQuantity = findViewById(R.id.edtQuantity);
         edtDescription = findViewById(R.id.edtDescription);
         edtContact = findViewById(R.id.edtContact);
+
+        // Set click listener on buttons
         fab.setOnClickListener(this);
         action_save.setOnClickListener(this);
         selectAddress.setOnClickListener(this);
 
+        // Slider adapter, to show all the selected images in the slider with animation
         adapter = new SliderAdapter();
         imageSlider.setSliderAdapter(adapter);
         imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -121,24 +133,31 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
+            // Use clicks the fab button to select images
             case R.id.fab: {
-                if (askForPermission()) {
+                // Check for user permissions
+                if (askForPermission()) { // True => Permission granted, False => Permission Reject
+                    // Open the gallery for user, if permission is granted.
                     openGallery();
                 }
                 break;
             }
+            // User clicks the location icon to select address
             case R.id.selectAddress: {
+                // Start a new activity so the user can select the address
                 Intent it = new Intent(NewDonation.this, SelectAddress.class);
                 startActivityForResult(it, 10);
                 break;
             }
+            // User clicks the save button to post the donation
             case R.id.action_save: {
+                // Check internet connection
                 if (!Helpers.isConnected(NewDonation.this)) {
                     Helpers.showError(NewDonation.this, Constants.ERROR, Constants.NO_INTERNET);
                     return;
                 }
                 // Check Donation Validation
-                if (isValidDonation()) {
+                if (isValidDonation()) { // True => Every input is good, False => Inputs have errors
                     Log.e(TAG, "Images List is: " + donationImages.size());
                     Log.e(TAG, "Address is: " + donation.getAddress());
                     Log.e(TAG, "Latitude is: " + donation.getLatitude());
@@ -149,6 +168,7 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
                     Log.e(TAG, "Contact is: " + donation.getContact());
                     Log.e(TAG, "Id is: " + donation.getId());
                     Log.e(TAG, "User Id is: " + donation.getUserId());
+                    // Start saving the donation
                     startSaving();
                 }
                 break;
@@ -156,8 +176,11 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    // Start saving the donation
     private void startSaving() {
+        // Convert button into loading bar
         action_save.startAnimation();
+        // Disable all input fields
         edtName.setEnabled(false);
         edtQuantity.setEnabled(false);
         edtDescription.setEnabled(false);
@@ -168,76 +191,105 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
         fab.setClickable(false);
         selectAddress.setEnabled(false);
         selectAddress.setClickable(false);
+        // Donation have images, first we have to upload the images, then we will save the donation
         if (donationImages.size() > 0) {
+            // Upload donation image to firebase
             uploadImage(0);
-        } else {
+        } else { // Donation don't have images, just save the donation
+            // Save the donation to database.
             saveToDatabase();
         }
     }
 
+    // Upload donation image to firebase
     private void uploadImage(final int count) {
+        // Firebase Storage Reference
         final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(Constants.DONATION_TABLE).child(donation.getId());
+        // Using calender to get a unique name of file every time.
         Calendar calendar = Calendar.getInstance();
         storageReference.child(calendar.getTimeInMillis() + "").putFile(donationImages.get(count))
+                // File upload success listener
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         taskSnapshot.getMetadata().getReference().getDownloadUrl()
+                                // File upload success listener
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Log.e(TAG, "in OnSuccess: " + uri.toString());
+                                        // Save the image URL to donation
                                         donation.getImages().add(uri.toString());
+                                        // If user have selected more then one image, then upload the other image first.
+                                        // If selected images count is equal to uploaded images count, the save the donation, otherwise upload the next image.
                                         if (donation.getImages().size() == donationImages.size()) {
+                                            // Save the donation to database.
                                             saveToDatabase();
                                         } else {
+                                            // Upload the remaining image first.
                                             uploadImage(count + 1);
                                         }
                                     }
                                 })
+                                // File upload failure listener
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e(TAG, "DownloadUrl:" + e.getMessage());
+                                        // Stop loading, and enable all the inputs
                                         stopSaving();
+                                        // Show user an error, donation posting is failed
                                         Helpers.showError(NewDonation.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
                                     }
                                 });
                     }
                 })
+                // File upload failure listener
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "UploadImageUrl:" + e.getMessage());
+                        // Stop loading, and enable all the inputs
                         stopSaving();
+                        // Show user an error, donation posting is failed
                         Helpers.showError(NewDonation.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
                     }
                 });
     }
 
+    // Save the donation to database.
     private void saveToDatabase() {
         reference.child(donation.getId()).setValue(donation)
+                // Save to database, success listener.
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        // Stop loading, and enable all the inputs
                         stopSaving();
+                        // Show a success message to user, that the donation is posted successfully.
                         Helpers.showSuccessWithActivityClose(NewDonation.this, Constants.POSTED, Constants.DONATION_POSTED);
                     }
                 })
+                // Save to database, failure listener.
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "Save to database failed:" + e.getMessage());
+                        // Stop loading, and enable all the inputs
                         stopSaving();
+                        // Show user an error, donation posting is failed
                         Helpers.showError(NewDonation.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
                     }
                 });
     }
 
+    // Stop loading, and enable all the inputs
     @SuppressLint("UseCompatLoadingForDrawables")
     private void stopSaving() {
+        // Stop button loading
         action_save.revertAnimation();
         action_save.setBackground(getResources().getDrawable(R.drawable.rounded_button));
+        // Enable all the inputs
         edtName.setEnabled(true);
         edtQuantity.setEnabled(true);
         edtDescription.setEnabled(true);
@@ -250,6 +302,7 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
         selectAddress.setClickable(true);
     }
 
+    // Check Donation Validation
     private boolean isValidDonation() {
         boolean flag = true;
         String error = "";
@@ -310,6 +363,7 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
         return flag;
     }
 
+    // Check for user permissions
     private boolean askForPermission() {
         if (ActivityCompat.checkSelfPermission(NewDonation.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(NewDonation.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(NewDonation.this, new String[]{
@@ -319,6 +373,7 @@ public class NewDonation extends AppCompatActivity implements View.OnClickListen
         return true;
     }
 
+    // Open the gallery for user, if permission is granted.
     private void openGallery() {
         ImagePicker.create(NewDonation.this)
                 .toolbarImageTitle("Tap to select")

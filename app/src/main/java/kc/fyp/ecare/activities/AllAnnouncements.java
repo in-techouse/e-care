@@ -27,10 +27,14 @@ import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.Donation;
 
 public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    // Create firebase database reference, to fetch all the announcements from Firebase database.
     private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.ANNOUNCEMENT_TABLE);
+    // Firebase Value Event listener, used to fetched data from firebase database, along with firebase database reference.
     private ValueEventListener listener;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    // A list of announcements, to save the announcements data, temporarily.
     private List<Announcement> data;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    // The purpose of adapter is to show all the loaded data in the recycler view.
     private AnnouncementAdapter announcementAdapter;
 
     @Override
@@ -38,23 +42,32 @@ public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_announcements);
 
+        // Find view by id, all widgets.
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView announcements = findViewById(R.id.announcements);
+        // Set swipeRefreshLayout, refresh listener.
+        swipeRefreshLayout.setOnRefreshListener(this);
         data = new ArrayList<>();
+        // Set recycler view properties to display the data to user.
         announcements.setLayoutManager(new LinearLayoutManager(AllAnnouncements.this));
         announcementAdapter = new AnnouncementAdapter(getApplicationContext());
         announcements.setAdapter(announcementAdapter);
+        // Fetch all announcements from firebase database.
         loadData();
     }
 
+    // Fetch all announcements from firebase database.
     private void loadData() {
+        // Show loading bar
         swipeRefreshLayout.setRefreshing(true);
 
         listener = new ValueEventListener() {
+            // Data is loaded successfully.
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Clear the data list.
                 data.clear();
+                // Insert all the loaded announcements, to data list.
                 if (snapshot.exists() && snapshot.hasChildren()) {
                     for (DataSnapshot d : snapshot.getChildren()) {
                         Announcement announcement = d.getValue(Announcement.class);
@@ -63,20 +76,26 @@ public class AllAnnouncements extends AppCompatActivity implements SwipeRefreshL
                         }
                     }
                 }
+                // Reverse the data list, so that the latest announcement should display on top.
                 Collections.reverse(data);
                 announcementAdapter.setData(data);
+                // Hide the loading bar.
                 swipeRefreshLayout.setRefreshing(false);
             }
 
+            // Data is loading failed.
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Hide the loading bar.
                 swipeRefreshLayout.setRefreshing(false);
+                // Show an error to user.
                 Helpers.showError(AllAnnouncements.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         };
         reference.addValueEventListener(listener);
     }
 
+    // SwipeRefreshLayout, refresh listener.
     @Override
     public void onRefresh() {
         loadData();

@@ -33,7 +33,6 @@
                 android:paddingTop="@dimen/mp13"
                 android:paddingBottom="@dimen/mp13">
 
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

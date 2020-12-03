@@ -57,16 +57,23 @@ import kc.fyp.ecare.models.User;
 
 public class NewAnnouncement extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "NewAnnouncement";
+    // Firebase database reference, to save the new announcement data to database.
     private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.ANNOUNCEMENT_TABLE);
+    // Model class, for announcement
     private Announcement announcement;
+    // To show selected images in adapter.
     private SliderAdapter adapter;
+    // From XML file
     private SliderView imageSlider;
+    // To store the user selected images, temporarily.
     private List<Uri> announcementImages;
+    // Button
     private CircularProgressButton action_save;
     private RelativeLayout selectAddress;
     private Spinner category;
     private TextView address;
     private EditText edtName, edtDescription, edtContact;
+    // To open gallery
     private FloatingActionButton fab;
 
     @Override
@@ -86,13 +93,15 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
 
         // Initialize all variables
         Session session = new Session(NewAnnouncement.this);
-        User user = session.getUser();
+        User user = session.getUser(); // Get value of current logged in user.
         announcement = new Announcement();
+        // Get id of announcement from firebase database.
         String id = reference.push().getKey();
         announcement.setId(id);
         announcement.setUserId(user.getId());
         announcementImages = new ArrayList<>();
 
+        // Find view by id all widgets
         fab = findViewById(R.id.fab);
         action_save = findViewById(R.id.action_save);
         imageSlider = findViewById(R.id.imageSlider);
@@ -102,10 +111,13 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         edtName = findViewById(R.id.edtName);
         edtDescription = findViewById(R.id.edtDescription);
         edtContact = findViewById(R.id.edtContact);
+
+        // Set click listener on buttons
         fab.setOnClickListener(this);
         action_save.setOnClickListener(this);
         selectAddress.setOnClickListener(this);
 
+        // Slider adapter, to show all the selected images in the slider with animation
         adapter = new SliderAdapter();
         imageSlider.setSliderAdapter(adapter);
         imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -121,24 +133,31 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
+            // Use clicks the fab button to select images
             case R.id.fab: {
-                if (askForPermission()) {
+                // Check for user permissions
+                if (askForPermission()) { // True => Permission granted, False => Permission Reject
+                    // Open the gallery for user, if permission is granted.
                     openGallery();
                 }
                 break;
             }
+            // User clicks the location icon to select address
             case R.id.selectAddress: {
+                // Start a new activity so the user can select the address
                 Intent it = new Intent(NewAnnouncement.this, SelectAddress.class);
                 startActivityForResult(it, 10);
                 break;
             }
+            // User clicks the save button to post the announcement
             case R.id.action_save: {
+                // Check internet connection
                 if (!Helpers.isConnected(NewAnnouncement.this)) {
                     Helpers.showError(NewAnnouncement.this, Constants.ERROR, Constants.NO_INTERNET);
                     return;
                 }
-                // Check Donation Validation
-                if (isValidDonation()) {
+                // Check Announcement Validation
+                if (isValidAnnouncement()) { // True => Every input is good, False => Inputs have errors
                     Log.e(TAG, "Images List is: " + announcementImages.size());
                     Log.e(TAG, "Address is: " + announcement.getAddress());
                     Log.e(TAG, "Latitude is: " + announcement.getLatitude());
@@ -148,6 +167,7 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
                     Log.e(TAG, "Contact is: " + announcement.getContact());
                     Log.e(TAG, "Id is: " + announcement.getId());
                     Log.e(TAG, "User Id is: " + announcement.getUserId());
+                    // Start saving the announcement
                     startSaving();
                 }
                 break;
@@ -155,8 +175,11 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    // Start saving the announcement
     private void startSaving() {
+        // Convert button into loading bar
         action_save.startAnimation();
+        // Disable all input fields
         edtName.setEnabled(false);
         edtDescription.setEnabled(false);
         edtContact.setEnabled(false);
@@ -166,14 +189,18 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         fab.setClickable(false);
         selectAddress.setEnabled(false);
         selectAddress.setClickable(false);
+        // Announcement have images, first we have to upload the images, then we will save the announcement
         if (announcementImages.size() > 0) {
+            // Upload announcement image to firebase
             uploadImage(0);
-        } else {
+        } else { // Announcement don't have images, just save the announcement
+            // Save the announcement to database.
             saveToDatabase();
         }
     }
 
-    private boolean isValidDonation() {
+    // Check Announcement Validation
+    private boolean isValidAnnouncement() {
         boolean flag = true;
         String error = "";
         String strName = edtName.getText().toString();
@@ -183,14 +210,14 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         String strCategory = category.getSelectedItem().toString();
 
         if (category.getSelectedItemPosition() == 0) {
-            error = error + "*Choose the donation category\n";
+            error = error + "*Choose the announcement category\n";
             flag = false;
         } else {
             announcement.setCategory(strCategory);
         }
 
         if (strAddress.equals(getResources().getString(R.string.required_at_address))) {
-            error = error + "*Choose the donation pickup address\n";
+            error = error + "*Choose the announcement address\n";
             flag = false;
         }
 
@@ -201,7 +228,6 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
             edtName.setError(null);
             announcement.setName(strName);
         }
-
 
         if (strDescription.length() < 3) {
             edtDescription.setError(Constants.DESCRIPTION_ERROR);
@@ -225,23 +251,31 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         return flag;
     }
 
-
+    // Upload announcement image to firebase
     private void uploadImage(final int count) {
-        final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(Constants.DONATION_TABLE).child(announcement.getId());
+        // Firebase Storage Reference
+        final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(Constants.ANNOUNCEMENT_TABLE).child(announcement.getId());
+        // Using calender to get a unique name of file every time.
         Calendar calendar = Calendar.getInstance();
         storageReference.child(calendar.getTimeInMillis() + "").putFile(announcementImages.get(count))
+                // File upload success listener
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get the download URL of uploaded file.
                         taskSnapshot.getMetadata().getReference().getDownloadUrl()
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Log.e(TAG, "in OnSuccess: " + uri.toString());
-                                        announcement.getImages().add(uri.toString());
+                                        announcement.getImages().add(uri.toString()); // Save the download URL
+                                        // If user have selected more then one image, then upload the other image first.
+                                        // If selected images count is equal to uploaded images count, the save the announcement, otherwise upload the next image.
                                         if (announcement.getImages().size() == announcementImages.size()) {
+                                            // Save the announcement to database.
                                             saveToDatabase();
                                         } else {
+                                            // Upload next image
                                             uploadImage(count + 1);
                                         }
                                     }
@@ -250,36 +284,48 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e(TAG, "DownloadUrl:" + e.getMessage());
+                                        // Stop the progress bar, and enable all inputs
                                         stopSaving();
+                                        // Show user an error that announcement is not saved.
                                         Helpers.showError(NewAnnouncement.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
                                     }
                                 });
                     }
                 })
+                // File upload failure listener
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "UploadImageUrl:" + e.getMessage());
+                        // Stop the progress bar, and enable all inputs
                         stopSaving();
+                        // Show user an error that announcement is not saved.
                         Helpers.showError(NewAnnouncement.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
                     }
                 });
     }
 
+    // Save the announcement to database.
     private void saveToDatabase() {
         reference.child(announcement.getId()).setValue(announcement)
+                // Value save success function
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        // Stop the progress bar, and enable all inputs
                         stopSaving();
+                        // Show success message to user, that the announcement have been posted successfully.
                         Helpers.showSuccessWithActivityClose(NewAnnouncement.this, Constants.POSTED, Constants.ANNOUNCEMENT_POSTED);
                     }
                 })
+                // Value save failure function
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "Save to database failed:" + e.getMessage());
+                        // Stop the progress bar, and enable all inputs
                         stopSaving();
+                        // Show user an error that announcement is not saved.
                         Helpers.showError(NewAnnouncement.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
                     }
                 });
@@ -300,6 +346,7 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         selectAddress.setClickable(true);
     }
 
+    // Check for user permissions
     private boolean askForPermission() {
         if (ActivityCompat.checkSelfPermission(NewAnnouncement.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(NewAnnouncement.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(NewAnnouncement.this, new String[]{
@@ -309,6 +356,7 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
+    // Open the gallery for user, if permission is granted.
     private void openGallery() {
         ImagePicker.create(NewAnnouncement.this)
                 .toolbarImageTitle("Tap to select")
