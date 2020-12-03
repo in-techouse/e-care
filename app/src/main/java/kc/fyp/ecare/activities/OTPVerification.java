@@ -19,6 +19,7 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -112,7 +113,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
     // Start Resend Timer
     private void startTimer() {
         action_resend.setEnabled(false);
-        countDownTimer = new CountDownTimer(120000, 1000) {
+        countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 millisUntilFinished = millisUntilFinished / 1000;
@@ -147,6 +148,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                     Helpers.showError(OTPVerification.this, Constants.REGISTRATION_FAILED, Constants.NO_INTERNET);
                     return;
                 }
+                Log.e(TAG, "Going to resent OTP");
                 action_verify_otp.startAnimation(); // This line will convert the button to circular progress bar
                 // Send OTP Again
                 sendOtpAgain();
@@ -185,13 +187,13 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
 
     // Send OTP Again
     private void sendOtpAgain() {
-        PhoneAuthProvider provider = PhoneAuthProvider.getInstance();
         PhoneAuthProvider.OnVerificationStateChangedCallbacks callBack;
         callBack = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onCodeSent(@NonNull String vId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
+                Log.e(TAG, "OTP Resent Success");
                 // Show Sent OTP Success Message
                 revertButton(); // Convert the circular progress bar to button again.
                 // Restart the Timer.
@@ -204,6 +206,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                Log.e(TAG, "OTP Resent Verified Automatically");
                 if (isRegistration) { // User is in the Registration Process, Register the user
                     // Link User Account with Phone Number
                     linkWithPhoneNumber(phoneAuthCredential);
@@ -215,6 +218,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
+                Log.e(TAG, "OTP Resent Failed");
                 revertButton(); // Convert the circular progress bar to button again.
                 countDownTimer.cancel();
                 timer.setText("--:--");
@@ -222,7 +226,15 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                 Helpers.showError(OTPVerification.this, Constants.PHONE_NUMBER_VERIFICATION, e.getMessage());
             }
         };
-        provider.verifyPhoneNumber(user.getPhoneNumber(), 120, TimeUnit.SECONDS, this, callBack);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(auth)
+                        .setPhoneNumber(user.getPhoneNumber())
+                        .setTimeout(60L, TimeUnit.SECONDS)
+                        .setActivity(this)
+                        .setCallbacks(callBack)
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
     // SignIn User Automatically
@@ -324,6 +336,7 @@ public class OTPVerification extends AppCompatActivity implements View.OnClickLi
                     @SuppressLint("UseCompatLoadingForDrawables")
                     @Override
                     public void onSuccess(Void aVoid) {
+                        auth.signOut();
                         revertButton();
                         Helpers.showSuccessWithActivityClose(OTPVerification.this, Constants.REGISTRATION_COMPLETED, Constants.REGISTRATION_SUCCESS);
                     }

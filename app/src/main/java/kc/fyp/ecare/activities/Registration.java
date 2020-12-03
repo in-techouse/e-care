@@ -19,6 +19,7 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -197,12 +198,12 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
 
     // Send Verification OTP
     private void sendOtp() {
-        PhoneAuthProvider provider = PhoneAuthProvider.getInstance();
         PhoneAuthProvider.OnVerificationStateChangedCallbacks callBack;
         callBack = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
+                Log.e(TAG, "OTP is sent");
                 enableInputs(); // Enable all inputs, and stop the progress
                 // Show Sent OTP Success Message
                 showOTPSuccess(Constants.PHONE_NUMBER_VERIFICATION, Constants.OTP_SENT + user.getPhoneNumber(), verificationId, forceResendingToken);
@@ -210,17 +211,26 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                Log.e(TAG, "User verified");
                 // Link User Account with Phone Number
                 linkWithPhoneNumber(phoneAuthCredential);
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
+                Log.e(TAG, "OTP Send failed");
                 enableInputs(); // Enable all inputs, and stop the progress
                 Helpers.showError(Registration.this, Constants.REGISTRATION_FAILED, e.getMessage());
             }
         };
-        provider.verifyPhoneNumber(user.getPhoneNumber(), 120, TimeUnit.SECONDS, this, callBack);
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(auth)
+                        .setPhoneNumber(user.getPhoneNumber())
+                        .setTimeout(60L, TimeUnit.SECONDS)
+                        .setActivity(this)
+                        .setCallbacks(callBack)
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
     // Show Sent OTP Success Message
