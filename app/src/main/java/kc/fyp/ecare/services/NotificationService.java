@@ -18,7 +18,7 @@ public class NotificationService {
     private static final String ONE_SIGNAL_URL = "https://onesignal.com/api/v1/notifications";
     private static final String APP_ID = "0794e1d8-e80a-43dc-9412-38fdf9f20b1d";
 
-    public static void sendNotificationToAllUsers(Context context, final String message, final String type, final String user_id) {
+    public static void sendNotificationToAllUsers(Context context, final String message, final String id, final String type, final String user_id) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -39,7 +39,7 @@ public class NotificationService {
                     String strJsonBody = "{"
                             + "\"app_id\": \"" + APP_ID + "\","
                             + "\"filters\": [{\"field\": \"tag\", \"key\": \"id\", \"relation\": \"!=\", \"value\": \"" + user_id + "\"}],"
-                            + "\"data\": {\"type\": \"" + type + "\"},"
+                            + "\"data\": {\"id\": \"" + id + "\", \"type\": \"" + type + "\"},"
                             + "\"contents\": {\"en\": \"" + message + "\"}"
                             + "}";
                     Log.e(TAG, strJsonBody);

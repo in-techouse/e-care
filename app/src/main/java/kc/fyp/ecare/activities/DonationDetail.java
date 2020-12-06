@@ -111,6 +111,9 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
         userEmail = findViewById(R.id.userEmail);
         userContact = findViewById(R.id.userContact);
         RelativeLayout callUser = findViewById(R.id.callUser);
+        RelativeLayout directions = findViewById(R.id.directions);
+        RelativeLayout contactDetail = findViewById(R.id.contactDetail);
+        View contactDetailDivider = findViewById(R.id.contactDetailDivider);
 
         LinearLayout makeRequestUpper = findViewById(R.id.makeRequestUpper);
         AppCompatButton makeRequest = findViewById(R.id.makeRequest);
@@ -133,11 +136,24 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
         contact.setText(donation.getContact());
 
         callUser.setOnClickListener(this);
+        directions.setOnClickListener(this);
         makeRequest.setOnClickListener(this);
+
+        contactDetail.setVisibility(View.GONE);
+        callUser.setVisibility(View.GONE);
+        contactDetailDivider.setVisibility(View.GONE);
 
         if (user.getId().equals(donation.getUserId())) {
             makeRequestUpper.setVisibility(View.GONE);
+            contactDetail.setVisibility(View.VISIBLE);
+            contactDetailDivider.setVisibility(View.VISIBLE);
+            callUser.setVisibility(View.VISIBLE);
+        } else if (user.getId().equals(donation.getDonatedTo())) {
+            contactDetail.setVisibility(View.VISIBLE);
+            contactDetailDivider.setVisibility(View.VISIBLE);
+            callUser.setVisibility(View.VISIBLE);
         }
+
         // Load Donation Owner Detail
         loadOwnerDetail();
     }
@@ -181,6 +197,13 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
                     intent.setData(Uri.parse("tel:" + donationUser.getPhoneNumber()));
                     startActivity(intent);
                 }
+                break;
+            }
+            case R.id.directions: {
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + donation.getLatitude() + "," + donation.getLongitude() + "");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
                 break;
             }
             case R.id.makeRequest: {

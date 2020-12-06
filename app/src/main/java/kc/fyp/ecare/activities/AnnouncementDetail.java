@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kc.fyp.ecare.R;
@@ -111,6 +112,7 @@ public class AnnouncementDetail extends AppCompatActivity implements View.OnClic
         userEmail = findViewById(R.id.userEmail);
         userContact = findViewById(R.id.userContact);
         RelativeLayout callUser = findViewById(R.id.callUser);
+        RelativeLayout directions = findViewById(R.id.directions);
 
         announcementImages = announcement.getImages();
         SliderAdapter adapter = new SliderAdapter();
@@ -130,6 +132,7 @@ public class AnnouncementDetail extends AppCompatActivity implements View.OnClic
         contact.setText(announcement.getContact());
 
         callUser.setOnClickListener(this);
+        directions.setOnClickListener(this);
         // Load Announcement Owner Detail
         loadOwnerDetail();
     }
@@ -173,6 +176,13 @@ public class AnnouncementDetail extends AppCompatActivity implements View.OnClic
                     intent.setData(Uri.parse("tel:" + announcementUser.getPhoneNumber()));
                     startActivity(intent);
                 }
+                break;
+            }
+            case R.id.directions: {
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + announcement.getLatitude() + "," + announcement.getLongitude() + "");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
                 break;
             }
         }

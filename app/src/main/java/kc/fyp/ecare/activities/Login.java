@@ -133,9 +133,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         user = d.getValue(User.class);
                     }
                     if (user != null) {
+                        Log.e(TAG, "User is not Null, Send OTP");
                         // Send OTP to user
                         sendOtp();
                     } else {
+                        Log.e(TAG, "User is Null");
                         revertAnimation();
                         // Show user an error that, no account is found related to the entered number.
                         Helpers.showError(Login.this, Constants.LOGIN_FAILED, Constants.NO_ACCOUNT_FOUND);
@@ -164,6 +166,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
+                Log.e(TAG, "OTP Sent Success");
                 revertAnimation();
                 // Show Sent OTP Success Message
                 showOTPSuccess(Constants.PHONE_NUMBER_VERIFICATION, Constants.OTP_SENT + user.getPhoneNumber(), verificationId, forceResendingToken);
@@ -171,12 +174,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                Log.e(TAG, "User is verified automatically");
                 // SignIn User Automatically
                 signInUser(phoneAuthCredential);
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
+                Log.e(TAG, "OTP Sent Failed");
                 revertAnimation();
                 // Send OTP failed, show user an error.
                 Helpers.showError(Login.this, Constants.LOGIN_FAILED, e.getMessage());
@@ -257,7 +262,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 Helpers.showError(Login.this, Constants.LOGIN_FAILED, Constants.EMAIL_NOT_VERIFIED_ERROR);
                                 auth.signOut();
                             }
-
                         } else {
                             revertAnimation();
                             Helpers.showError(Login.this, Constants.LOGIN_FAILED, Constants.SOMETHING_WENT_WRONG);

@@ -13,6 +13,11 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.onesignal.OSNotification;
 import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
@@ -27,19 +32,25 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.json.JSONObject;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.director.Constants;
 import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.fragments.DashboardFragment;
 import kc.fyp.ecare.fragments.MyAnnouncementsFragment;
 import kc.fyp.ecare.fragments.MyDonationsFragment;
 import kc.fyp.ecare.fragments.MyNotificationsFragment;
+import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.User;
 import kc.fyp.ecare.services.NotificationService;
 import kc.fyp.ecare.ui.NoSwipeableViewPager;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, OneSignal.NotificationReceivedHandler, OneSignal.NotificationOpenedHandler {
     public static final String TAG = "Dashboard";
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private ValueEventListener listener;
     private DrawerLayout drawer;
     private NoSwipeableViewPager pager;
     private FloatingActionsMenu floatingActionsMenu;
@@ -126,8 +137,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         OneSignal.sendTag("id", user.getId());
         OneSignal.sendTag("email", user.getEmail());
         OneSignal.sendTag("phoneNumber", user.getPhoneNumber());
-
-        NotificationService.sendNotificationToAllUsers(getApplicationContext(), "Hello User", "test", user.getId());
     }
 
     // This function is called whenever an option is selected from left navigation menu.
@@ -207,13 +216,78 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     // Part of Push Notification Service, called when the notification is open
     @Override
     public void notificationOpened(OSNotificationOpenResult result) {
-        Log.e(TAG, "Notification Opened");
+//        Log.e(TAG, "Notification Opened");
+//        Log.e(TAG, "Notification Opened, Result: " + result.toString());
+//        Log.e(TAG, "Notification Opened, Result JSON: " + result.toJSONObject().toString());
+        try {
+            JSONObject jsonObject = result.toJSONObject();
+            JSONObject notification = jsonObject.getJSONObject("notification");
+//            Log.e(TAG, "Notification is: " + notification.toString());
+            JSONObject payload = notification.getJSONObject("payload");
+//            Log.e(TAG, "Payload is: " + payload.toString());
+            JSONObject additionalData = payload.getJSONObject("additionalData");
+//            Log.e(TAG, "Additional Data is: " + additionalData.toString());
+            if (additionalData != null) {
+                String id = additionalData.getString("id");
+                String type = additionalData.getString("type");
+                if (type != null && id != null) {
+                    if (type.equals("ViewAnnouncement")) {
+                        loadAnnouncement(id);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "JSON Parsing Exception Occur");
+            Log.e(TAG, "Exception: " + e.getMessage());
+        }
     }
 
     // Part of Push Notification Service, called when the notification is received
     @Override
     public void notificationReceived(OSNotification notification) {
         Log.e(TAG, "Notification Received");
+    }
+
+    private void loadAnnouncement(final String id) {
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (listener != null) {
+                    reference.child(Constants.ANNOUNCEMENT_TABLE).child(id).removeEventListener(listener);
+                }
+                if (listener != null) {
+                    reference.removeEventListener(listener);
+                }
+                Announcement announcement = snapshot.getValue(Announcement.class);
+                if (announcement != null) {
+                    Intent it = new Intent(Dashboard.this, AnnouncementDetail.class);
+                    it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("announcement", announcement);
+                    it.putExtras(bundle);
+                    startActivity(it);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (listener != null) {
+                    reference.child(Constants.ANNOUNCEMENT_TABLE).child(id).removeEventListener(listener);
+                }
+                if (listener != null) {
+                    reference.removeEventListener(listener);
+                }
+            }
+        };
+        reference.child(Constants.ANNOUNCEMENT_TABLE).child(id).addValueEventListener(listener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (listener != null) {
+            reference.removeEventListener(listener);
+        }
     }
 
     // Pager Adapter is used with ViewPager to display the fragments to the user.

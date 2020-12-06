@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -37,6 +39,7 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
     private ValueEventListener listener;
     private CircularProgressButton action_send_request;
     private User donationUser, currentUser;
+    private Donation donation;
     private EditText edtName, edtDescription;
     private Request request;
     private int count;
@@ -58,7 +61,7 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
             finish();
             return;
         }
-        Donation donation = (Donation) bundle.getSerializable("donation");
+        donation = (Donation) bundle.getSerializable("donation");
         if (donation == null) {
             Log.e(TAG, "Donation is null");
             finish();
@@ -87,6 +90,7 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
         TextView category = findViewById(R.id.category);
         TextView description = findViewById(R.id.description);
         TextView address = findViewById(R.id.address);
+        RelativeLayout directions = findViewById(R.id.directions);
         name.setText(donation.getName());
         category.setText(donation.getCategory());
         description.setText(donation.getDescription());
@@ -107,6 +111,7 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
 
         action_send_request = findViewById(R.id.action_send_request);
         action_send_request.setOnClickListener(this);
+        directions.setOnClickListener(this);
         loadUserDonationsCount();
     }
 
@@ -141,6 +146,13 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
+            case R.id.directions: {
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + donation.getLatitude() + "," + donation.getLongitude() + "");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+                break;
+            }
             case R.id.action_send_request: {
                 // Check Internet Connection
                 if (!Helpers.isConnected(getApplicationContext())) {

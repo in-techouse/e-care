@@ -54,6 +54,7 @@ import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.Donation;
 import kc.fyp.ecare.models.User;
+import kc.fyp.ecare.services.NotificationService;
 
 public class NewAnnouncement extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "NewAnnouncement";
@@ -75,6 +76,8 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
     private EditText edtName, edtDescription, edtContact;
     // To open gallery
     private FloatingActionButton fab;
+    // To save the value of current user
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +96,7 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
 
         // Initialize all variables
         Session session = new Session(NewAnnouncement.this);
-        User user = session.getUser(); // Get value of current logged in user.
+        user = session.getUser(); // Get value of current logged in user.
         announcement = new Announcement();
         // Get id of announcement from firebase database.
         String id = reference.push().getKey();
@@ -126,6 +129,10 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         imageSlider.setIndicatorUnselectedColor(Color.GRAY);
         imageSlider.setScrollTimeInSec(4);
         imageSlider.startAutoCycle();
+
+        edtName.setText("New Test Announcement");
+        edtDescription.setText("New Test Announcement Description");
+        edtContact.setText("03004399059");
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -314,6 +321,9 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
                     public void onSuccess(Void aVoid) {
                         // Stop the progress bar, and enable all inputs
                         stopSaving();
+                        // Send to notification to all users
+                        String notificationMessage = user.getName() + " posted an announcement. Check it out, if you can help.";
+                        NotificationService.sendNotificationToAllUsers(getApplicationContext(), notificationMessage, announcement.getId(), "ViewAnnouncement", user.getId());
                         // Show success message to user, that the announcement have been posted successfully.
                         Helpers.showSuccessWithActivityClose(NewAnnouncement.this, Constants.POSTED, Constants.ANNOUNCEMENT_POSTED);
                     }
