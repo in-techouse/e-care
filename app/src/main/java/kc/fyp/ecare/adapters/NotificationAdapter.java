@@ -1,6 +1,8 @@
 package kc.fyp.ecare.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.activities.DonationDetail;
+import kc.fyp.ecare.activities.RequestDetail;
 import kc.fyp.ecare.models.Notification;
 import kc.fyp.ecare.models.Request;
 
@@ -46,7 +50,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.mainCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent it = new Intent(context, RequestDetail.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("notification", notification);
+                it.putExtras(bundle);
+                context.startActivity(it);
             }
         });
     }

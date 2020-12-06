@@ -1,6 +1,8 @@
 package kc.fyp.ecare.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.activities.RequestDetail;
 import kc.fyp.ecare.models.Request;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestHolder> {
@@ -53,7 +56,12 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestH
         holder.mainCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent it = new Intent(context, RequestDetail.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("request", request);
+                it.putExtras(bundle);
+                context.startActivity(it);
             }
         });
     }

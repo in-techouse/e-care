@@ -117,6 +117,12 @@
             android:name=".activities.MakeRequest"
             android:parentActivityName=".activities.DonationDetail"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activities.RequestDetail"
+            android:label="@string/title_activity_request_detail"
+            android:parentActivityName=".activities.Dashboard"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

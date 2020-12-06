@@ -84,4 +84,8 @@
     <string name="menu_requests">My Requests</string>
     <string name="message">Message</string>
     <string name="requestTime">Request TIme</string>
+    <string name="title_activity_request_detail">RequestDetail</string>
+    <string name="tab_text_1">REQUEST DETAIL</string>
+    <string name="tab_text_2">DONATION DETAIL</string>
+    <string name="acceptRequest">ACCEPT REQUEST</string>
 </resources>
