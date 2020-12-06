@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="kc.fyp.ecare">
+    package="kc.thefyp.ecare">
     <!-- PERMISSIONS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,7 +26,7 @@
             android:value="@string/googleKey" />
         <!-- Splash Activity -->
         <activity
-            android:name=".activities.Splash"
+            android:name="kc.thefyp.ecare.activities.Splash"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,91 +36,91 @@
         </activity>
         <!-- Login Activity -->
         <activity
-            android:name=".activities.Login"
+            android:name="kc.thefyp.ecare.activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Login via Email Activity -->
         <activity
-            android:name=".activities.LoginViaEmail"
-            android:parentActivityName=".activities.Login"
+            android:name="kc.thefyp.ecare.activities.LoginViaEmail"
+            android:parentActivityName="kc.thefyp.ecare.activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Registration Activity -->
         <activity
-            android:name=".activities.Registration"
-            android:parentActivityName=".activities.Login"
+            android:name="kc.thefyp.ecare.activities.Registration"
+            android:parentActivityName="kc.thefyp.ecare.activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Forgot Password Activity -->
         <activity
-            android:name=".activities.ForgotPassword"
-            android:parentActivityName=".activities.Login"
+            android:name="kc.thefyp.ecare.activities.ForgotPassword"
+            android:parentActivityName="kc.thefyp.ecare.activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- OTP Verification Activity -->
         <activity
-            android:name=".activities.OTPVerification"
-            android:parentActivityName=".activities.Login"
+            android:name="kc.thefyp.ecare.activities.OTPVerification"
+            android:parentActivityName="kc.thefyp.ecare.activities.Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Dashboard Activity -->
         <activity
-            android:name=".activities.Dashboard"
+            android:name="kc.thefyp.ecare.activities.Dashboard"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Edit Profile Activity -->
         <activity
-            android:name=".activities.EditProfile"
+            android:name="kc.thefyp.ecare.activities.EditProfile"
             android:label="@string/title_activity_edit_profile"
-            android:parentActivityName=".activities.Dashboard"
+            android:parentActivityName="kc.thefyp.ecare.activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Add New Announcement Activity -->
         <activity
-            android:name=".activities.NewAnnouncement"
+            android:name="kc.thefyp.ecare.activities.NewAnnouncement"
             android:label="@string/title_activity_new_announcement"
-            android:parentActivityName=".activities.Dashboard"
+            android:parentActivityName="kc.thefyp.ecare.activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Add New Product Activity -->
         <activity
-            android:name=".activities.NewDonation"
+            android:name="kc.thefyp.ecare.activities.NewDonation"
             android:label="@string/title_activity_new_product"
-            android:parentActivityName=".activities.Dashboard"
+            android:parentActivityName="kc.thefyp.ecare.activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- All Products Activity -->
         <activity
-            android:name=".activities.AllDonations"
-            android:parentActivityName=".activities.Dashboard"
+            android:name="kc.thefyp.ecare.activities.AllDonations"
+            android:parentActivityName="kc.thefyp.ecare.activities.Dashboard"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- All Announcements Activity -->
         <activity
-            android:name=".activities.AllAnnouncements"
-            android:parentActivityName=".activities.Dashboard"
+            android:name="kc.thefyp.ecare.activities.AllAnnouncements"
+            android:parentActivityName="kc.thefyp.ecare.activities.Dashboard"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Select Address -->
         <activity
-            android:name=".activities.SelectAddress"
-            android:parentActivityName=".activities.NewDonation"
+            android:name="kc.thefyp.ecare.activities.SelectAddress"
+            android:parentActivityName="kc.thefyp.ecare.activities.NewDonation"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Donation Detail Activity -->
         <activity
-            android:name=".activities.DonationDetail"
+            android:name="kc.thefyp.ecare.activities.DonationDetail"
             android:label="@string/title_activity_donation_detail"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Announcement Detail Activity -->
         <activity
-            android:name=".activities.AnnouncementDetail"
+            android:name="kc.thefyp.ecare.activities.AnnouncementDetail"
             android:label="@string/title_activity_announcement_detail"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!--    Make a request for Donation    -->
         <activity
-            android:name=".activities.MakeRequest"
-            android:parentActivityName=".activities.DonationDetail"
+            android:name="kc.thefyp.ecare.activities.MakeRequest"
+            android:parentActivityName="kc.thefyp.ecare.activities.DonationDetail"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".activities.RequestDetail"
+            android:name="kc.thefyp.ecare.activities.RequestDetail"
             android:label="@string/title_activity_request_detail"
-            android:parentActivityName=".activities.Dashboard"
+            android:parentActivityName="kc.thefyp.ecare.activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
