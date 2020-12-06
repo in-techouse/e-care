@@ -129,10 +129,6 @@ public class NewAnnouncement extends AppCompatActivity implements View.OnClickLi
         imageSlider.setIndicatorUnselectedColor(Color.GRAY);
         imageSlider.setScrollTimeInSec(4);
         imageSlider.startAutoCycle();
-
-        edtName.setText("New Test Announcement");
-        edtDescription.setText("New Test Announcement Description");
-        edtContact.setText("03004399059");
     }
 
     @SuppressLint("NonConstantResourceId")

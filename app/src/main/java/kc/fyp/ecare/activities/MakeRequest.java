@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
+
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 import de.hdodenhof.circleimageview.CircleImageView;
 import kc.fyp.ecare.R;
@@ -32,6 +34,7 @@ import kc.fyp.ecare.director.Session;
 import kc.fyp.ecare.models.Donation;
 import kc.fyp.ecare.models.Request;
 import kc.fyp.ecare.models.User;
+import kc.fyp.ecare.services.NotificationService;
 
 public class MakeRequest extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MakeRequest";
@@ -171,18 +174,26 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
         action_send_request.startAnimation();
         edtName.setEnabled(false);
         edtDescription.setEnabled(false);
+        request.setTimestamps(new Date().getTime());
         reference.child(Constants.REQUEST_TABLE).child(request.getId()).setValue(request)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        // Send a notification to donation poster
+                        String notificationMessage = "Hey " + donationUser.getName() + "!, " + currentUser.getName() + " submitted a request for your donation you posted.";
+                        NotificationService.sendNotificationToUser(getApplicationContext(), notificationMessage, request.getId(), "ViewRequest", donationUser.getId());
+                        // Stop progress, and enable all inputs.
                         stopSaving();
+                        // Show user a success message that request is submitted/
                         Helpers.showSuccessWithActivityClose(MakeRequest.this, Constants.POSTED, Constants.REQUEST_POSTED + donationUser.getName());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        // Stop progress, and enable all inputs.
                         stopSaving();
+                        // Show user an error that donation request is not posted.
                         Helpers.showError(MakeRequest.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
                     }
                 });

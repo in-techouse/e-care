@@ -42,6 +42,7 @@ import kc.fyp.ecare.fragments.DashboardFragment;
 import kc.fyp.ecare.fragments.MyAnnouncementsFragment;
 import kc.fyp.ecare.fragments.MyDonationsFragment;
 import kc.fyp.ecare.fragments.MyNotificationsFragment;
+import kc.fyp.ecare.fragments.RequestFragment;
 import kc.fyp.ecare.models.Announcement;
 import kc.fyp.ecare.models.User;
 import kc.fyp.ecare.services.NotificationService;
@@ -62,6 +63,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     private MyDonationsFragment myDonationsFragment;
     private MyNotificationsFragment myNotificationsFragment;
     private MyAnnouncementsFragment myAnnouncementsFragment;
+    private RequestFragment requestFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         myDonationsFragment = new MyDonationsFragment();
         myAnnouncementsFragment = new MyAnnouncementsFragment();
         myNotificationsFragment = new MyNotificationsFragment();
+        requestFragment = new RequestFragment();
 
         // Set fragments to view pager (ViewPager is used to display fragments)
         pager = findViewById(R.id.pager);
@@ -144,7 +147,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
-        Log.e(TAG, "" + id);
         switch (id) {
             case R.id.nav_home: { // Load Home Fragment, if user click "Home"
                 toolbar.setTitle("HOME");
@@ -164,6 +166,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             case R.id.nav_notifications: { // Load My Notifications Fragment, if user click "My Notifications"
                 toolbar.setTitle("MY NOTIFICATIONS");
                 pager.setCurrentItem(3);
+                break;
+            }
+            case R.id.nav_requests: { // Load My Requests Fragment, if user click "My Requesrs"
+                toolbar.setTitle("MY REQUESTS");
+                pager.setCurrentItem(4);
                 break;
             }
             case R.id.nav_profile: { // Open edit profile activity, if user click "Profile"
@@ -233,6 +240,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 if (type != null && id != null) {
                     if (type.equals("ViewAnnouncement")) {
                         loadAnnouncement(id);
+                    } else if (type.equals("ViewRequest")) {
+                        toolbar.setTitle("MY REQUESTS");
+                        pager.setCurrentItem(4);
                     }
                 }
             }
@@ -315,6 +325,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 case 3: {
                     return myNotificationsFragment;
                 }
+                case 4: {
+                    return requestFragment;
+                }
             }
             return null;
         }
@@ -322,7 +335,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         // Return total number of fragments
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
     }
 }

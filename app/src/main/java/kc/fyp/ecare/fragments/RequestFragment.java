@@ -23,39 +23,39 @@ import java.util.Collections;
 import java.util.List;
 
 import kc.fyp.ecare.R;
-import kc.fyp.ecare.adapters.NotificationAdapter;
+import kc.fyp.ecare.adapters.DonationAdapter;
 import kc.fyp.ecare.adapters.RequestAdapter;
 import kc.fyp.ecare.director.Constants;
 import kc.fyp.ecare.director.Helpers;
 import kc.fyp.ecare.director.Session;
+import kc.fyp.ecare.models.Donation;
 import kc.fyp.ecare.models.Notification;
 import kc.fyp.ecare.models.Request;
 import kc.fyp.ecare.models.User;
 
-public class MyNotificationsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    // Create firebase database reference, to fetch my notifications from Firebase database.
-    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.NOTIFICATIONS_TABLE);
+public class RequestFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+    // Create firebase database reference, to fetch my requests from Firebase database.
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.REQUEST_TABLE);
     private SwipeRefreshLayout swipeRefreshLayout;
     // User, to get value of current logged in user.
     private User user;
-    // A list of notifications, to save the notifications data, temporarily.
-    private List<Notification> data;
+    // A list of requests, to save the requests data, temporarily.
+    private List<Request> data;
     // The purpose of adapter is to show all the loaded data in the recycler view.
-    private NotificationAdapter notificationAdapter;
+    private RequestAdapter requestAdapter;
 
-    public MyNotificationsFragment() {
+    public RequestFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_my_notifications, container, false);
+        View root = inflater.inflate(R.layout.fragment_request, container, false);
 
         // Find view by id, all widgets.
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
-        RecyclerView notifications = root.findViewById(R.id.notifications);
+        RecyclerView requests = root.findViewById(R.id.requests);
         // Set swipeRefreshLayout, refresh listener.
         swipeRefreshLayout.setOnRefreshListener(this);
         // Session, to get value of current logged in user.
@@ -63,10 +63,10 @@ public class MyNotificationsFragment extends Fragment implements SwipeRefreshLay
         user = session.getUser(); // this line will return you the value of current logged in user.
         data = new ArrayList<>();
         // Set recycler view properties to display the data to user.
-        notifications.setLayoutManager(new LinearLayoutManager(getActivity()));
-        notificationAdapter = new NotificationAdapter(getActivity());
-        notifications.setAdapter(notificationAdapter);
-        // Fetch my notifications from firebase database.
+        requests.setLayoutManager(new LinearLayoutManager(getActivity()));
+        requestAdapter = new RequestAdapter(getActivity());
+        requests.setAdapter(requestAdapter);
+        // Fetch my requests from firebase database.
         loadData();
 
         return root;
@@ -78,24 +78,24 @@ public class MyNotificationsFragment extends Fragment implements SwipeRefreshLay
         swipeRefreshLayout.setRefreshing(true);
 
         // Get my notifications, where userId == user.getId()
-        reference.orderByChild("userId").equalTo(user.getId()).addValueEventListener(new ValueEventListener() {
+        reference.orderByChild("toUser").equalTo(user.getId()).addValueEventListener(new ValueEventListener() {
             // Data loading success function
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Clear the data list.
                 data.clear();
-                // Insert all the loaded notifications, to data list.
+                // Insert all the loaded requests, to data list.
                 if (snapshot.exists() && snapshot.hasChildren()) {
                     for (DataSnapshot d : snapshot.getChildren()) {
-                        Notification notification = d.getValue(Notification.class);
-                        if (notification != null) {
-                            data.add(notification);
+                        Request request = d.getValue(Request.class);
+                        if (request != null) {
+                            data.add(request);
                         }
                     }
                 }
-                // Reverse the data list, so that the latest notifications should display on top.
+                // Reverse the data list, so that the latest requests should display on top.
                 Collections.reverse(data);
-                notificationAdapter.setData(data);
+                requestAdapter.setData(data);
                 // Hide the loading bar.
                 swipeRefreshLayout.setRefreshing(false);
             }

@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,11 +15,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import kc.fyp.ecare.R;
+import kc.fyp.ecare.director.Constants;
+import kc.fyp.ecare.models.Notification;
 
 public class NotificationService {
     private static final String TAG = "NotificationService";
     private static final String ONE_SIGNAL_URL = "https://onesignal.com/api/v1/notifications";
     private static final String APP_ID = "0794e1d8-e80a-43dc-9412-38fdf9f20b1d";
+    private static final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.NOTIFICATIONS_TABLE);
 
     public static void sendNotificationToAllUsers(Context context, final String message, final String id, final String type, final String user_id) {
         AsyncTask.execute(new Runnable() {
@@ -114,6 +120,14 @@ public class NotificationService {
                     jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                     scanner.close();
                     Log.e(TAG, jsonResponse);
+                    String nId = reference.push().getKey();
+                    Notification notification = new Notification();
+                    notification.setNotificationId(nId);
+                    notification.setId(id);
+                    notification.setMessage(message);
+                    notification.setType(type);
+                    notification.setUserId(user_id);
+                    reference.child(nId).setValue(notification);
                 } catch (Exception e) {
                     Log.e(TAG, "Notification not send");
                 }

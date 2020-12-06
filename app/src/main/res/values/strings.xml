@@ -81,4 +81,7 @@
     <string name="request_description">Request Description</string>
     <string name="action_send_request">SEND REQUEST</string>
     <string name="donation_detail">DONATION DETAIL</string>
+    <string name="menu_requests">My Requests</string>
+    <string name="message">Message</string>
+    <string name="requestTime">Request TIme</string>
 </resources>

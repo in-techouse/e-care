@@ -21,6 +21,10 @@
             android:icon="@drawable/notification"
             android:title="@string/menu_notifications" />
         <item
+            android:id="@+id/nav_requests"
+            android:icon="@drawable/requests"
+            android:title="@string/menu_requests" />
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/profile"
             android:title="@string/menu_profile" />

@@ -177,6 +177,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        Log.e(TAG, "Email Registration Success");
                         if (auth.getCurrentUser() != null) { // Registration is successful
                             user.setId(auth.getCurrentUser().getUid()); // Set user id
                             // Send Verification OTP
@@ -190,6 +191,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Email Registration Failed: " + e.getMessage());
                         enableInputs(); // Enable all inputs, and stop the progress
                         Helpers.showError(Registration.this, Constants.REGISTRATION_FAILED, e.getMessage());
                     }
@@ -203,7 +205,7 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
-                Log.e(TAG, "OTP is sent");
+                Log.e(TAG, "OTP is sent successfully");
                 enableInputs(); // Enable all inputs, and stop the progress
                 // Show Sent OTP Success Message
                 showOTPSuccess(Constants.PHONE_NUMBER_VERIFICATION, Constants.OTP_SENT + user.getPhoneNumber(), verificationId, forceResendingToken);
@@ -211,14 +213,14 @@ public class Registration extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                Log.e(TAG, "User verified");
+                Log.e(TAG, "User verified automatically,");
                 // Link User Account with Phone Number
                 linkWithPhoneNumber(phoneAuthCredential);
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-                Log.e(TAG, "OTP Send failed");
+                Log.e(TAG, "OTP Send failed, with error: " + e.getMessage());
                 enableInputs(); // Enable all inputs, and stop the progress
                 Helpers.showError(Registration.this, Constants.REGISTRATION_FAILED, e.getMessage());
             }

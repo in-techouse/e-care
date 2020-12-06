@@ -21,5 +21,44 @@
             android:layout_marginTop="@dimen/mp5"
             android:layout_marginBottom="@dimen/mp5"
             android:background="@color/colorPrimaryDark" />
+
+        <TextView
+            android:paddingStart="@dimen/mp10"
+            android:paddingTop="@dimen/mp7"
+            android:paddingEnd="@dimen/mp10"
+            android:paddingBottom="@dimen/mp7"
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/message"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/txt14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mp1"
+            android:layout_marginTop="@dimen/mp5"
+            android:layout_marginBottom="@dimen/mp5"
+            android:background="@color/colorPrimaryDark" />
+
+        <TextView
+            android:layout_gravity="end"
+            android:paddingStart="@dimen/mp10"
+            android:paddingTop="@dimen/mp7"
+            android:paddingEnd="@dimen/mp10"
+            android:paddingBottom="@dimen/mp7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_details"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/txt14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mp1"
+            android:layout_marginTop="@dimen/mp5"
+            android:layout_marginBottom="@dimen/mp5"
+            android:background="@color/colorPrimaryDark" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
