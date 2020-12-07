@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,7 +92,20 @@ public class RequestDetail extends AppCompatActivity implements View.OnClickList
             loadRequestFromNotification();
         } else {
             Log.e(TAG, "Request is not NULL, Notification is NULL");
-            sectionsPagerAdapter.setRequest(request);
+            new CountDownTimer(2000, 2000) {
+                @Override
+                public void onTick(long l) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    if (dialog != null && dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                    sectionsPagerAdapter.setRequest(request);
+                }
+            }.start();
         }
     }
 

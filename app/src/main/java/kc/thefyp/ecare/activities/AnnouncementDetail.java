@@ -41,6 +41,7 @@ import kc.thefyp.ecare.director.Helpers;
 import kc.thefyp.ecare.director.Session;
 import kc.thefyp.ecare.models.Announcement;
 import kc.thefyp.ecare.models.User;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class AnnouncementDetail extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "AnnouncementDetail";
@@ -53,6 +54,7 @@ public class AnnouncementDetail extends AppCompatActivity implements View.OnClic
     private LinearLayout userLayout;
     private User announcementUser;
     private CircleImageView userImage;
+    private MaterialRatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,7 @@ public class AnnouncementDetail extends AppCompatActivity implements View.OnClic
         userImage = findViewById(R.id.userImage);
         userEmail = findViewById(R.id.userEmail);
         userContact = findViewById(R.id.userContact);
+        ratingBar = findViewById(R.id.ratingBar);
         RelativeLayout callUser = findViewById(R.id.callUser);
         RelativeLayout directions = findViewById(R.id.directions);
 
@@ -147,6 +150,7 @@ public class AnnouncementDetail extends AppCompatActivity implements View.OnClic
                         if (announcementUser.getImage() != null && announcementUser.getImage().length() > 0) {
                             Glide.with(getApplicationContext()).load(announcementUser.getImage()).into(userImage);
                         }
+                        ratingBar.setRating(Float.parseFloat(announcementUser.getRating() + ""));
                     }
                 }
                 userProgress.setVisibility(View.GONE);

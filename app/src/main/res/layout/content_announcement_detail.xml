@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryLight"
+    android:background="@color/screenBg"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.AnnouncementDetail"
     tools:showIn="@layout/activity_announcement_detail">
@@ -187,11 +187,11 @@
                         android:src="@drawable/direction" />
 
                     <LinearLayout
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_toStartOf="@id/directionIcon"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/directionIcon"
                         android:orientation="vertical">
 
                         <TextView
@@ -340,6 +340,18 @@
                                 android:layout_centerVertical="true"
                                 android:src="@drawable/call" />
                         </RelativeLayout>
+
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/ratingBar"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mp10"
+                            android:maxWidth="@dimen/mp45"
+                            android:maxHeight="@dimen/mp45"
+                            android:minWidth="@dimen/mp45"
+                            android:minHeight="@dimen/mp45"
+                            android:numStars="5" />
 
                     </LinearLayout>
 

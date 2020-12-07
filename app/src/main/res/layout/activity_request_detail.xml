@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/screenBg"
     tools:context=".activities.RequestDetail">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -38,10 +39,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/screenBg"
         android:orientation="vertical"
-        android:paddingTop="@dimen/mp5"
-        android:paddingBottom="@dimen/mp5">
+        android:padding="@dimen/mp7">
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/acceptRequest"

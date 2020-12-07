@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryLight"
+    android:background="@color/screenBg"
     tools:context=".fragments.RequestFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,13 +14,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryLight">
+        android:background="@color/screenBg">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/requests"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryLight" />
+            android:background="@color/screenBg" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

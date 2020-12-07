@@ -42,6 +42,7 @@ import kc.thefyp.ecare.director.Helpers;
 import kc.thefyp.ecare.director.Session;
 import kc.thefyp.ecare.models.Donation;
 import kc.thefyp.ecare.models.User;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class DonationDetail extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "DonationDetail";
@@ -54,6 +55,7 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
     private LinearLayout userLayout;
     private User donationUser;
     private CircleImageView userImage;
+    private MaterialRatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,7 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
         userImage = findViewById(R.id.userImage);
         userEmail = findViewById(R.id.userEmail);
         userContact = findViewById(R.id.userContact);
+        ratingBar = findViewById(R.id.ratingBar);
         RelativeLayout callUser = findViewById(R.id.callUser);
         RelativeLayout directions = findViewById(R.id.directions);
         RelativeLayout contactDetail = findViewById(R.id.contactDetail);
@@ -170,6 +173,7 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
                         if (donationUser.getImage() != null && donationUser.getImage().length() > 0) {
                             Glide.with(getApplicationContext()).load(donationUser.getImage()).into(userImage);
                         }
+                        ratingBar.setRating(Float.parseFloat(donationUser.getRating() + ""));
                     }
                 }
                 userProgress.setVisibility(View.GONE);

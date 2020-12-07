@@ -42,7 +42,7 @@ public class Splash extends AppCompatActivity {
 
     private void setSplashy() {
         new Splashy(this)
-                .setLogo(R.drawable.logo)
+                .setLogo(R.drawable.logo_new)
                 .setTitle(R.string.app_name)
                 .setTitleColor(R.color.colorPrimaryDark)
                 .setSubTitle(R.string.app_intro)
