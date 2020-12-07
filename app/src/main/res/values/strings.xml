@@ -88,4 +88,6 @@
     <string name="tab_text_1">REQUEST DETAIL</string>
     <string name="tab_text_2">DONATION DETAIL</string>
     <string name="acceptRequest">ACCEPT REQUEST</string>
+    <string name="request_detail">REQUEST DETAIL</string>
+    <string name="request_made_by">REQUEST MADE BY</string>
 </resources>

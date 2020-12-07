@@ -48,12 +48,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.mainCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(context, RequestDetail.class);
-                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("notification", notification);
-                it.putExtras(bundle);
-                context.startActivity(it);
+                if (notification.getType().equals("ViewRequest")) {
+                    Intent it = new Intent(context, RequestDetail.class);
+                    it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("notification", notification);
+                    it.putExtras(bundle);
+                    context.startActivity(it);
+                }
             }
         });
     }

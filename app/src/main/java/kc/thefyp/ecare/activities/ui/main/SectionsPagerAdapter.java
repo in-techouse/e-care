@@ -1,6 +1,7 @@
 package kc.thefyp.ecare.activities.ui.main;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -8,9 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import kc.thefyp.ecare.R;
 import kc.thefyp.ecare.fragments.DonationDetailFragment;
 import kc.thefyp.ecare.fragments.RequestDetailFragment;
+import kc.thefyp.ecare.models.Request;
 
 
 /**
@@ -32,6 +36,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         donationDetailFragment = new DonationDetailFragment();
     }
 
+    @NotNull
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -53,5 +58,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // Show 2 total pages.
         return 2;
+    }
+
+    public void setRequest(Request request) {
+        Log.e("RequestDetail", "Request received");
+        Log.e("RequestDetail", "Request id is: " + request.getId());
+        requestDetailFragment.setRequest(request);
+        donationDetailFragment.setRequest(request);
     }
 }

@@ -39,16 +39,26 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@color/colorPrimaryLight"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/mp5"
+        android:paddingBottom="@dimen/mp5">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/acceptRequest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/mp15"
+            android:layout_marginBottom="@dimen/mp15"
+            android:background="@drawable/rounded_button"
+            android:gravity="center"
             android:text="@string/acceptRequest"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="@dimen/mp7"
+            app:spinning_bar_width="@dimen/mp5" />
+
     </LinearLayout>
 
     <androidx.viewpager.widget.ViewPager
