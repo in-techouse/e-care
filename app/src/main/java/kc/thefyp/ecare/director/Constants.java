@@ -35,6 +35,8 @@ public class Constants {
     public static final String DONATION_POSTED = "Your donation has been posted and live for the needy persons.";
     public static final String ANNOUNCEMENT_POSTED = "Your announcement has been posted and live for the other persons.";
     public static final String REQUEST_POSTED = "Your request has been sent to ";
+    public static final String REQUEST_ACCEPTED = "The request has been accepted successfully.";
+    public static final String REQUEST_REJECTED = "The request has been rejected.";
 
     // Table Name
     public static final String USER_TABLE = "Users";

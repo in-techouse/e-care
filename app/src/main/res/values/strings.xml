@@ -90,4 +90,9 @@
     <string name="acceptRequest">ACCEPT REQUEST</string>
     <string name="request_detail">REQUEST DETAIL</string>
     <string name="request_made_by">REQUEST MADE BY</string>
+    <string name="menu_requests_received">Request Received</string>
+    <string name="menu_requests_made">Request Made</string>
+    <string name="requestStatus">REQUEST STATUS</string>
+    <string name="rejectRequest">REJECT REUQEST</string>
+    <string name="donations_received">Donations Received</string>
 </resources>

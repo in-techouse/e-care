@@ -41,7 +41,7 @@ public class RequestDetailFragment extends Fragment implements View.OnClickListe
     private ValueEventListener listener;
     private Request request;
     private LinearLayout mainRoot;
-    private TextView description, requestTime, userName, userEmail, userContact;
+    private TextView description, requestTime, requestStatus, userName, userEmail, userContact;
     private CardView userCard;
     private CircleImageView userImage;
     private User fromUser;
@@ -59,6 +59,7 @@ public class RequestDetailFragment extends Fragment implements View.OnClickListe
         mainRoot.setVisibility(View.GONE);
         description = root.findViewById(R.id.description);
         requestTime = root.findViewById(R.id.requestTime);
+        requestStatus = root.findViewById(R.id.requestStatus);
         userCard = root.findViewById(R.id.userCard);
         userCard.setVisibility(View.GONE);
         userName = root.findViewById(R.id.userName);
@@ -80,6 +81,7 @@ public class RequestDetailFragment extends Fragment implements View.OnClickListe
         cal.setTimeInMillis(request.getTimestamps());
         String date = DateFormat.format("EEEE, dd, MMM yyyy hh:mm:ss", cal).toString();
         requestTime.setText(date);
+        requestStatus.setText(request.getStatus());
         description.setText(request.getDescription());
         mainRoot.setVisibility(View.VISIBLE);
         loadUserDetail();

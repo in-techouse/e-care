@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screenBg"
-    tools:context=".fragments.MyAnnouncementsFragment">
+    tools:context=".fragments.RequestMadeFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -17,7 +17,7 @@
         android:background="@color/screenBg">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/announcements"
+            android:id="@+id/requests"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/screenBg" />

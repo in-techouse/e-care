@@ -30,7 +30,7 @@ import kc.thefyp.ecare.director.Session;
 import kc.thefyp.ecare.models.Request;
 import kc.thefyp.ecare.models.User;
 
-public class RequestFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class RequestReceived extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // Create firebase database reference, to fetch my requests from Firebase database.
     private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Constants.REQUEST_TABLE);
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -41,14 +41,14 @@ public class RequestFragment extends Fragment implements SwipeRefreshLayout.OnRe
     // The purpose of adapter is to show all the loaded data in the recycler view.
     private RequestAdapter requestAdapter;
 
-    public RequestFragment() {
+    public RequestReceived() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_request, container, false);
+        View root = inflater.inflate(R.layout.fragment_request_received, container, false);
 
         // Find view by id, all widgets.
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
@@ -69,12 +69,12 @@ public class RequestFragment extends Fragment implements SwipeRefreshLayout.OnRe
         return root;
     }
 
-    // Fetch my notifications from firebase database.
+    // Fetch my requests from firebase database.
     private void loadData() {
         // Show loading bar to user.
         swipeRefreshLayout.setRefreshing(true);
 
-        // Get my notifications, where userId == user.getId()
+        // Get my requests, where userId == user.getId()
         reference.orderByChild("toUser").equalTo(user.getId()).addValueEventListener(new ValueEventListener() {
             // Data loading success function
             @Override

@@ -111,6 +111,7 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
         request.setDonationId(donation.getId());
         request.setToUser(donationUser.getId());
         request.setFromUser(currentUser.getId());
+        request.setStatus("Requested");
 
         action_send_request = findViewById(R.id.action_send_request);
         action_send_request.setOnClickListener(this);

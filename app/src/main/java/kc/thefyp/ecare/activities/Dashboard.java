@@ -39,17 +39,20 @@ import kc.thefyp.ecare.R;
 import kc.thefyp.ecare.director.Constants;
 import kc.thefyp.ecare.director.Session;
 import kc.thefyp.ecare.fragments.DashboardFragment;
+import kc.thefyp.ecare.fragments.DonationReceivedFragment;
 import kc.thefyp.ecare.fragments.MyAnnouncementsFragment;
 import kc.thefyp.ecare.fragments.MyDonationsFragment;
 import kc.thefyp.ecare.fragments.MyNotificationsFragment;
-import kc.thefyp.ecare.fragments.RequestFragment;
+import kc.thefyp.ecare.fragments.RequestMadeFragment;
+import kc.thefyp.ecare.fragments.RequestReceived;
 import kc.thefyp.ecare.models.Announcement;
+import kc.thefyp.ecare.models.Donation;
 import kc.thefyp.ecare.models.User;
 import kc.thefyp.ecare.ui.NoSwipeableViewPager;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, OneSignal.NotificationReceivedHandler, OneSignal.NotificationOpenedHandler {
     public static final String TAG = "Dashboard";
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private ValueEventListener listener;
     private DrawerLayout drawer;
     private NoSwipeableViewPager pager;
@@ -62,7 +65,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     private MyDonationsFragment myDonationsFragment;
     private MyNotificationsFragment myNotificationsFragment;
     private MyAnnouncementsFragment myAnnouncementsFragment;
-    private RequestFragment requestFragment;
+    private RequestReceived requestReceived;
+    private RequestMadeFragment requestMadeFragment;
+    private DonationReceivedFragment donationReceivedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +94,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         myDonationsFragment = new MyDonationsFragment();
         myAnnouncementsFragment = new MyAnnouncementsFragment();
         myNotificationsFragment = new MyNotificationsFragment();
-        requestFragment = new RequestFragment();
+        requestReceived = new RequestReceived();
+        requestMadeFragment = new RequestMadeFragment();
+        donationReceivedFragment = new DonationReceivedFragment();
 
         // Set fragments to view pager (ViewPager is used to display fragments)
         pager = findViewById(R.id.pager);
@@ -167,9 +174,19 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 pager.setCurrentItem(3);
                 break;
             }
-            case R.id.nav_requests: { // Load My Requests Fragment, if user click "My Requesrs"
-                toolbar.setTitle("MY REQUESTS");
+            case R.id.nav_requests_received: { // Load REQUESTS RECEIVED Fragment, if user click "REQUESTS RECEIVED"
+                toolbar.setTitle("REQUESTS RECEIVED");
                 pager.setCurrentItem(4);
+                break;
+            }
+            case R.id.nav_requests_made: { // Load REQUESTS MADE Fragment, if user click "REQUESTS MADE"
+                toolbar.setTitle("REQUESTS MADE");
+                pager.setCurrentItem(5);
+                break;
+            }
+            case R.id.nav_donations_received: {
+                toolbar.setTitle("DONATIONS RECEIVED");
+                pager.setCurrentItem(6);
                 break;
             }
             case R.id.nav_profile: { // Open edit profile activity, if user click "Profile"
@@ -240,8 +257,12 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     if (type.equals("ViewAnnouncement")) {
                         loadAnnouncement(id);
                     } else if (type.equals("ViewRequest")) {
-                        toolbar.setTitle("MY REQUESTS");
+                        toolbar.setTitle("REQUESTS RECEIVED");
                         pager.setCurrentItem(4);
+                    } else if (type.equals("RequestAccepted")) {
+                        pager.setCurrentItem(5);
+                    } else if (type.equals("RequestRejected")) {
+                        pager.setCurrentItem(5);
                     }
                 }
             }
@@ -325,7 +346,13 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     return myNotificationsFragment;
                 }
                 case 4: {
-                    return requestFragment;
+                    return requestReceived;
+                }
+                case 5: {
+                    return requestMadeFragment;
+                }
+                case 6: {
+                    return donationReceivedFragment;
                 }
             }
             return null;
@@ -334,7 +361,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         // Return total number of fragments
         @Override
         public int getCount() {
-            return 5;
+            return 7;
         }
     }
 }

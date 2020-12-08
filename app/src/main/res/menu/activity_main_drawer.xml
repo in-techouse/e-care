@@ -21,9 +21,17 @@
             android:icon="@drawable/notification"
             android:title="@string/menu_notifications" />
         <item
-            android:id="@+id/nav_requests"
+            android:id="@+id/nav_requests_received"
             android:icon="@drawable/requests"
-            android:title="@string/menu_requests" />
+            android:title="@string/menu_requests_received" />
+        <item
+            android:id="@+id/nav_requests_made"
+            android:icon="@drawable/requests"
+            android:title="@string/menu_requests_made" />
+        <item
+            android:id="@+id/nav_donations_received"
+            android:icon="@drawable/donation"
+            android:title="@string/donations_received" />
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/profile"

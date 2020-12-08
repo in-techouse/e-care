@@ -150,9 +150,14 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
             contactDetailDivider.setVisibility(View.VISIBLE);
             callUser.setVisibility(View.VISIBLE);
         } else if (user.getId().equals(donation.getDonatedTo())) {
+            makeRequestUpper.setVisibility(View.GONE);
             contactDetail.setVisibility(View.VISIBLE);
             contactDetailDivider.setVisibility(View.VISIBLE);
             callUser.setVisibility(View.VISIBLE);
+        }
+
+        if (donation.isDonated()) {
+            makeRequestUpper.setVisibility(View.GONE);
         }
 
         // Load Donation Owner Detail

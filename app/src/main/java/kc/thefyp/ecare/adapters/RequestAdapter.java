@@ -52,6 +52,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestH
         cal.setTimeInMillis(request.getTimestamps());
         String date = DateFormat.format("EEEE, dd, MMM yyyy hh:mm:ss", cal).toString();
         holder.requestTime.setText(date);
+        holder.requestStatus.setText(request.getStatus());
         holder.message.setText(request.getDescription());
         holder.mainCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,13 +74,14 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestH
 
     public static class RequestHolder extends RecyclerView.ViewHolder {
         CardView mainCard;
-        TextView userName, requestTime, message;
+        TextView userName, requestTime, requestStatus, message;
 
         public RequestHolder(@NonNull View itemView) {
             super(itemView);
             mainCard = itemView.findViewById(R.id.mainCard);
             userName = itemView.findViewById(R.id.userName);
             requestTime = itemView.findViewById(R.id.requestTime);
+            requestStatus = itemView.findViewById(R.id.requestStatus);
             message = itemView.findViewById(R.id.message);
         }
     }

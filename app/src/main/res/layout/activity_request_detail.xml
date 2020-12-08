@@ -41,18 +41,37 @@
         android:layout_gravity="bottom"
         android:background="@color/screenBg"
         android:orientation="vertical"
-        android:padding="@dimen/mp7">
+        android:paddingStart="@dimen/mp13"
+        android:paddingTop="@dimen/mp7"
+        android:paddingEnd="@dimen/mp13"
+        android:paddingBottom="@dimen/mp7">
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/acceptRequest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/mp15"
-            android:layout_marginBottom="@dimen/mp15"
+            android:layout_marginTop="@dimen/mp5"
+            android:layout_marginBottom="@dimen/mp5"
             android:background="@drawable/rounded_button"
             android:gravity="center"
             android:text="@string/acceptRequest"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="@dimen/mp7"
+            app:spinning_bar_width="@dimen/mp5" />
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/rejectRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/mp5"
+            android:layout_marginBottom="@dimen/mp5"
+            android:background="@drawable/danger_rounded_button"
+            android:gravity="center"
+            android:text="@string/rejectRequest"
             android:textColor="@color/colorWhite"
             android:textStyle="bold"
             app:spinning_bar_color="#FFF"

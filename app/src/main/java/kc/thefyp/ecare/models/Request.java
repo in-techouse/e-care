@@ -3,19 +3,20 @@ package kc.thefyp.ecare.models;
 import java.io.Serializable;
 
 public class Request implements Serializable {
-    private String id, donationId, toUser, fromUser, userName, description;
+    private String id, donationId, toUser, fromUser, userName, description, status;
     private long timestamps;
 
     public Request() {
     }
 
-    public Request(String id, String donationId, String toUser, String fromUser, String userName, String description, long timestamps) {
+    public Request(String id, String donationId, String toUser, String fromUser, String userName, String description, String status, long timestamps) {
         this.id = id;
         this.donationId = donationId;
         this.toUser = toUser;
         this.fromUser = fromUser;
         this.userName = userName;
         this.description = description;
+        this.status = status;
         this.timestamps = timestamps;
     }
 
@@ -73,5 +74,13 @@ public class Request implements Serializable {
 
     public void setTimestamps(long timestamps) {
         this.timestamps = timestamps;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
