@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import kc.thefyp.ecare.R;
 import kc.thefyp.ecare.activities.AllAnnouncements;
 import kc.thefyp.ecare.activities.AllDonations;
+import kc.thefyp.ecare.activities.AllUsers;
 
 public class DashboardFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = "DashboardFragment";
@@ -30,9 +31,11 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         // Find view by Id, all widgets
         RelativeLayout allAnnouncements = root.findViewById(R.id.allAnnouncements);
         RelativeLayout allProducts = root.findViewById(R.id.allDonations);
+        RelativeLayout allUsers = root.findViewById(R.id.allUsers);
         // Set click listener on relevant widgets
         allAnnouncements.setOnClickListener(this);
         allProducts.setOnClickListener(this);
+        allUsers.setOnClickListener(this);
         return root;
     }
 
@@ -52,6 +55,13 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             case R.id.allDonations: {
                 // Start all donations activity, to display all the donations.
                 Intent it = new Intent(getActivity(), AllDonations.class);
+                startActivity(it);
+                break;
+            }
+            // Clicked on All Users
+            case R.id.allUsers: {
+                // Start all users activity, to display all the users.
+                Intent it = new Intent(getActivity(), AllUsers.class);
                 startActivity(it);
                 break;
             }

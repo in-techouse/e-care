@@ -38,6 +38,12 @@ public class DonationAdapter extends RecyclerView.Adapter<DonationAdapter.Donati
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        this.data.clear();
+        this.data = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public DonationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

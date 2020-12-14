@@ -38,6 +38,12 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        this.data.clear();
+        this.data = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public AnnouncementHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/screenBg"
     android:orientation="vertical"
-    android:weightSum="2"
+    android:weightSum="3"
     tools:context=".fragments.DashboardFragment">
 
     <RelativeLayout
@@ -24,8 +24,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/mp96"
+                android:layout_height="@dimen/mp96"
                 android:layout_gravity="center"
                 android:src="@drawable/announcements_white" />
 
@@ -52,8 +52,8 @@
         android:padding="@dimen/mp17">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/mp96"
+            android:layout_height="@dimen/mp96"
             android:layout_centerInParent="true"
             android:orientation="vertical">
 
@@ -69,6 +69,39 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/mp13"
                 android:text="@string/all_donation"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/txt20"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/allUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mp7"
+        android:layout_weight="1"
+        android:background="@drawable/option_bg"
+        android:padding="@dimen/mp17">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/mp96"
+                android:layout_height="@dimen/mp96"
+                android:layout_gravity="center"
+                android:src="@drawable/group" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/mp13"
+                android:text="@string/allUsers"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/txt20"
                 android:textStyle="bold" />

@@ -93,10 +93,13 @@
     <string name="menu_requests_received">Request Received</string>
     <string name="menu_requests_made">Request Made</string>
     <string name="requestStatus">REQUEST STATUS</string>
-    <string name="rejectRequest">REJECT REUQEST</string>
+    <string name="rejectRequest">REJECT REQUEST</string>
     <string name="donations_received">Donations Received</string>
     <string name="reviewDonation">REVIEW DONATION</string>
     <string name="postReview">SUBMIT REVIEW</string>
     <string name="reviewComments">Review Comments</string>
     <string name="closeSheet">"CLOSE "</string>
+    <string name="allUsers">View Users</string>
+    <string name="empty" />
+    <string name="search">SEARCH</string>
 </resources>

@@ -123,6 +123,12 @@
             android:parentActivityName="kc.thefyp.ecare.activities.Dashboard"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".activities.AllUsers"
+            android:parentActivityName=".activities.Dashboard"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
     </application>
 
 </manifest>
