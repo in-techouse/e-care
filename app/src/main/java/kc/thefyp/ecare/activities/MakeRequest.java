@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
@@ -46,6 +48,7 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
     private EditText edtName, edtDescription;
     private Request request;
     private int count;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +119,14 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
         action_send_request = findViewById(R.id.action_send_request);
         action_send_request.setOnClickListener(this);
         directions.setOnClickListener(this);
+
+        dialog = new ProgressDialog(MakeRequest.this);
+        dialog.setTitle("LOADING!");
+        dialog.setMessage("Please wait...!");
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
         loadUserDonationsCount();
     }
 
@@ -125,12 +136,26 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
+                    Calendar donationCalendar = Calendar.getInstance();
+                    Calendar currentCalendar = Calendar.getInstance();
                     for (DataSnapshot data : snapshot.getChildren()) {
                         if (data.getValue() != null) {
-                            Log.e(TAG, "Value found");
-                            count++;
+                            Donation d = data.getValue(Donation.class);
+                            if (d != null) {
+                                donationCalendar.setTimeInMillis(d.getTimestamps());
+                                Log.e(TAG, "Value found, Donation Date is: " + donationCalendar.getTime().toString());
+                                Log.e(TAG, "Value found, Current Date is: " + currentCalendar.getTime().toString());
+                                if (currentCalendar.get(Calendar.MONTH) == donationCalendar.get(Calendar.MONTH)) {
+                                    Log.e(TAG, "Same Month Found");
+                                    count++;
+                                } else {
+                                    Log.e(TAG, "No Same Month Found");
+                                }
+                            }
                         }
                     }
+                    dialog.dismiss();
+                    Log.e(TAG, "Total Donations are: " + count);
                     if (count > 4) {
                         Helpers.showErrorWithActivityClose(MakeRequest.this, Constants.ERROR, Constants.CANNOT_REQUEST_MORE_DONATIONS);
                     }
@@ -139,7 +164,8 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                dialog.dismiss();
+                Helpers.showErrorWithActivityClose(MakeRequest.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
             }
         };
         reference.child(Constants.DONATION_TABLE).orderByChild("donatedTo").equalTo(currentUser.getId()).addValueEventListener(listener);
