@@ -348,6 +348,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mp10"
+                            android:isIndicator="true"
                             android:maxWidth="@dimen/mp45"
                             android:maxHeight="@dimen/mp45"
                             android:minWidth="@dimen/mp45"

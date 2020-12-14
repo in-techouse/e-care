@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +24,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import java.util.Date;
@@ -36,20 +38,25 @@ import kc.thefyp.ecare.director.Session;
 import kc.thefyp.ecare.models.Donation;
 import kc.thefyp.ecare.models.Notification;
 import kc.thefyp.ecare.models.Request;
+import kc.thefyp.ecare.models.Review;
 import kc.thefyp.ecare.models.User;
 import kc.thefyp.ecare.services.NotificationService;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class RequestDetail extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "RequestDetail";
     private final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-    private ValueEventListener listener, donationValueListener;
+    private ValueEventListener listener, donationValueListener, reviewListener;
     private Notification notification;
     private Request request;
     private ProgressDialog dialog;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private LinearLayout acceptRequestUpper;
     private User currentUser, donationUser;
-    private CircularProgressButton acceptRequest, rejectRequest;
+    private CircularProgressButton acceptRequest, rejectRequest, reviewDonation, postReview;
+    private Donation donation;
+    private EditText edtReviewComments;
+    private MaterialRatingBar ratingBar;
+    private BottomSheetBehavior sheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +94,25 @@ public class RequestDetail extends AppCompatActivity implements View.OnClickList
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        acceptRequestUpper = findViewById(R.id.acceptRequestUpper);
         acceptRequest = findViewById(R.id.acceptRequest);
         acceptRequest.setOnClickListener(this);
         rejectRequest = findViewById(R.id.rejectRequest);
         rejectRequest.setOnClickListener(this);
+        reviewDonation = findViewById(R.id.reviewDonation);
+        reviewDonation.setOnClickListener(this);
+        postReview = findViewById(R.id.postReview);
+        postReview.setOnClickListener(this);
+        CircularProgressButton closeSheet = findViewById(R.id.closeSheet);
+        closeSheet.setOnClickListener(this);
+
+        edtReviewComments = findViewById(R.id.edtReviewComments);
+        ratingBar = findViewById(R.id.ratingBar);
+
+        LinearLayout layoutBottomSheet = findViewById(R.id.bottom_sheet);
+        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
+        sheetBehavior.setHideable(true);
+        sheetBehavior.setPeekHeight(0);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         dialog = new ProgressDialog(RequestDetail.this);
         dialog.setTitle("LOADING!");
@@ -111,9 +132,13 @@ public class RequestDetail extends AppCompatActivity implements View.OnClickList
         } else {
             Log.e(TAG, "Request is not NULL, Notification is NULL");
             if (!currentUser.getId().equals(request.getToUser())) {
-                acceptRequestUpper.setVisibility(View.GONE);
+//                acceptRequestUpper.setVisibility(View.GONE);
+                acceptRequest.setVisibility(View.GONE);
+                rejectRequest.setVisibility(View.GONE);
             } else if (!request.getStatus().equals("Requested")) {
-                acceptRequestUpper.setVisibility(View.GONE);
+//                acceptRequestUpper.setVisibility(View.GONE);
+                acceptRequest.setVisibility(View.GONE);
+                rejectRequest.setVisibility(View.GONE);
             }
             loadDonationUser();
         }
@@ -135,9 +160,13 @@ public class RequestDetail extends AppCompatActivity implements View.OnClickList
                     if (request != null) {
                         Log.e(TAG, "Request is loaded: " + request.getId());
                         if (!currentUser.getId().equals(request.getToUser())) {
-                            acceptRequestUpper.setVisibility(View.GONE);
+//                            acceptRequestUpper.setVisibility(View.GONE);
+                            acceptRequest.setVisibility(View.GONE);
+                            rejectRequest.setVisibility(View.GONE);
                         } else if (!request.getStatus().equals("Requested")) {
-                            acceptRequestUpper.setVisibility(View.GONE);
+//                            acceptRequestUpper.setVisibility(View.GONE);
+                            acceptRequest.setVisibility(View.GONE);
+                            rejectRequest.setVisibility(View.GONE);
                         }
                         loadDonationUser();
                     } else {
@@ -178,12 +207,57 @@ public class RequestDetail extends AppCompatActivity implements View.OnClickList
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            donationUser = snapshot.getValue(User.class);
+                            if (donationUser != null) {
+                                loadDonation();
+                            } else {
+                                if (dialog != null && dialog.isShowing()) {
+                                    dialog.dismiss();
+                                }
+                                Helpers.showErrorWithActivityClose(RequestDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+                            }
+                        } else {
+                            if (dialog != null && dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Helpers.showErrorWithActivityClose(RequestDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        if (dialog != null && dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+                        Helpers.showErrorWithActivityClose(RequestDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+                    }
+                });
+    }
+
+    private void loadDonation() {
+        Log.e(TAG, "Load Donation Started");
+        reference.child(Constants.DONATION_TABLE).child(request.getDonationId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.e(TAG, "Load Donation Success");
                         if (dialog != null && dialog.isShowing()) {
                             dialog.dismiss();
                         }
                         if (snapshot.exists()) {
-                            donationUser = snapshot.getValue(User.class);
-                            if (donationUser != null) {
+                            Log.e(TAG, "Load Donation, Snapshot exists: " + snapshot.toString());
+                            donation = snapshot.getValue(Donation.class);
+                            if (donation != null) {
+                                Log.e(TAG, "Load Donation, Donation is not null");
+                                Log.e(TAG, "Load Donation, Donation Name is: " + donation.getName());
+                                Log.e(TAG, "Load Donation, Donation Reviewed is: " + donation.isReviewed());
+                                if (donation.isReviewed()) {
+                                    reviewDonation.setVisibility(View.GONE);
+                                    Log.e(TAG, "Load Donation, Donation Review posted");
+                                } else {
+                                    Log.e(TAG, "Load Donation, Donation Review is not posted");
+                                }
                                 sectionsPagerAdapter.setRequest(request);
                             } else {
                                 Helpers.showErrorWithActivityClose(RequestDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
@@ -216,7 +290,105 @@ public class RequestDetail extends AppCompatActivity implements View.OnClickList
                 rejectRequest();
                 break;
             }
+            case R.id.reviewDonation: {
+                sheetBehavior.setHideable(false);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                break;
+            }
+            case R.id.postReview: {
+                float rating = ratingBar.getRating();
+                String strComments = edtReviewComments.getText().toString();
+                Log.e(TAG, "Rating is: " + rating);
+                Log.e(TAG, "Rating Comments are: " + strComments);
+                Review review = new Review();
+                review.setId(reference.child(Constants.REVIEW_TABLE).push().getKey());
+                review.setComment(strComments);
+                review.setRating(rating);
+                review.setDonationId(donation.getId());
+                review.setFromUser(request.getFromUser());
+                review.setToUser(request.getToUser());
+                postReview.startAnimation();
+                postReview(review);
+                break;
+            }
+            case R.id.closeSheet: {
+                sheetBehavior.setHideable(true);
+                sheetBehavior.setPeekHeight(0);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            }
         }
+    }
+
+    private void postReview(Review review) {
+        reference.child(Constants.REVIEW_TABLE).child(review.getId()).setValue(review)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        setDonationUserRating();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        stopReviewAnimation();
+                        Helpers.showError(RequestDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+                    }
+                });
+    }
+
+    private void setDonationUserRating() {
+        reviewListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (reviewListener != null) {
+                    reference.child(Constants.REVIEW_TABLE).orderByChild("toUser").removeEventListener(reviewListener);
+                }
+                if (reviewListener != null) {
+                    reference.removeEventListener(reviewListener);
+                }
+                if (snapshot.exists()) {
+                    int count = 0;
+                    float totalRating = 0;
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        Review r = data.getValue(Review.class);
+                        if (r != null) {
+                            count++;
+                            totalRating = totalRating + r.getRating();
+                        }
+                    }
+                    final float exactRating = (totalRating / count);
+                    @SuppressLint("DefaultLocale") String s = String.format("%.2f", exactRating);
+                    double userRating = Double.parseDouble(s);
+                    reference.child(Constants.DONATION_TABLE).child(donation.getId()).child("isReviewed").setValue(true);
+                    reference.child(Constants.USER_TABLE).child(request.getToUser()).child("rating").setValue(userRating);
+                    stopReviewAnimation();
+                    Helpers.showSuccessWithActivityClose(RequestDetail.this, "REVIEW POSTED", "Your review has been posted successfully.");
+                } else {
+                    stopReviewAnimation();
+                    Helpers.showError(RequestDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (reviewListener != null) {
+                    reference.child(Constants.REVIEW_TABLE).orderByChild("toUser").removeEventListener(reviewListener);
+                }
+                if (reviewListener != null) {
+                    reference.removeEventListener(reviewListener);
+                }
+                stopReviewAnimation();
+                Helpers.showError(RequestDetail.this, Constants.ERROR, Constants.SOMETHING_WENT_WRONG);
+            }
+        };
+        reference.child(Constants.REVIEW_TABLE).orderByChild("toUser").addValueEventListener(reviewListener);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void stopReviewAnimation() {
+        postReview.revertAnimation();
+        postReview.setBackground(getResources().getDrawable(R.drawable.rounded_button));
     }
 
     private void acceptRequest() {
@@ -346,7 +518,12 @@ public class RequestDetail extends AppCompatActivity implements View.OnClickList
     private void finishActivity() {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
+        } else if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehavior.setHideable(true);
+            sheetBehavior.setPeekHeight(0);
+            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        } else {
+            finish();
         }
-        finish();
     }
 }

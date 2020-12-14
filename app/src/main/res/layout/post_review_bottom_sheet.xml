@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/app_bar_height"
+    android:background="@color/screenBg"
+    android:orientation="vertical"
+    android:padding="@dimen/mp13"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="@dimen/app_bar_height"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mp10"
+        android:hint="@string/reviewComments">
+
+        <EditText
+            android:id="@+id/edtReviewComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:maxLines="10"
+            android:minLines="6"
+            android:scrollbars="vertical" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+        android:id="@+id/ratingBar"
+        style="@style/Widget.MaterialRatingBar.RatingBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mp10"
+        android:maxWidth="@dimen/mp45"
+        android:maxHeight="@dimen/mp45"
+        android:minWidth="@dimen/mp45"
+        android:minHeight="@dimen/mp45"
+        android:numStars="5" />
+
+
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+        android:id="@+id/postReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/mp13"
+        android:layout_marginBottom="@dimen/mp13"
+        android:background="@drawable/rounded_button"
+        android:gravity="center"
+        android:text="@string/postReview"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        app:spinning_bar_color="#FFF"
+        app:spinning_bar_padding="@dimen/mp7"
+        app:spinning_bar_width="@dimen/mp5" />
+
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+        android:id="@+id/closeSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/mp13"
+        android:layout_marginBottom="@dimen/mp13"
+        android:background="@drawable/danger_rounded_button"
+        android:gravity="center"
+        android:text="@string/closeSheet"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        app:spinning_bar_color="#FFF"
+        app:spinning_bar_padding="@dimen/mp7"
+        app:spinning_bar_width="@dimen/mp5" />
+
+</LinearLayout>

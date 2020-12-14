@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,85 +7,108 @@
     android:background="@color/screenBg"
     tools:context=".activities.RequestDetail">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:padding="@dimen/appbar_padding"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
-    </com.google.android.material.appbar.AppBarLayout>
+            android:layout_alignParentTop="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-    <LinearLayout
-        android:id="@+id/acceptRequestUpper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@color/screenBg"
-        android:orientation="vertical"
-        android:paddingStart="@dimen/mp13"
-        android:paddingTop="@dimen/mp7"
-        android:paddingEnd="@dimen/mp13"
-        android:paddingBottom="@dimen/mp7">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="?actionBarSize"
+                android:padding="@dimen/appbar_padding"
+                android:text="@string/app_name"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
 
-        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-            android:id="@+id/acceptRequest"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/acceptRequestUpper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/mp5"
-            android:layout_marginBottom="@dimen/mp5"
-            android:background="@drawable/rounded_button"
-            android:gravity="center"
-            android:text="@string/acceptRequest"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            app:spinning_bar_color="#FFF"
-            app:spinning_bar_padding="@dimen/mp7"
-            app:spinning_bar_width="@dimen/mp5" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@color/screenBg"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/mp13"
+            android:paddingTop="@dimen/mp7"
+            android:paddingEnd="@dimen/mp13"
+            android:paddingBottom="@dimen/mp7">
 
-        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-            android:id="@+id/rejectRequest"
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                android:id="@+id/reviewDonation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/mp5"
+                android:layout_marginBottom="@dimen/mp5"
+                android:background="@drawable/rounded_button"
+                android:gravity="center"
+                android:text="@string/reviewDonation"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                app:spinning_bar_color="#FFF"
+                app:spinning_bar_padding="@dimen/mp7"
+                app:spinning_bar_width="@dimen/mp5" />
+
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                android:id="@+id/acceptRequest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/mp5"
+                android:layout_marginBottom="@dimen/mp5"
+                android:background="@drawable/rounded_button"
+                android:gravity="center"
+                android:text="@string/acceptRequest"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                app:spinning_bar_color="#FFF"
+                app:spinning_bar_padding="@dimen/mp7"
+                app:spinning_bar_width="@dimen/mp5" />
+
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                android:id="@+id/rejectRequest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/mp5"
+                android:layout_marginBottom="@dimen/mp5"
+                android:background="@drawable/danger_rounded_button"
+                android:gravity="center"
+                android:text="@string/rejectRequest"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                app:spinning_bar_color="#FFF"
+                app:spinning_bar_padding="@dimen/mp7"
+                app:spinning_bar_width="@dimen/mp5" />
+
+        </LinearLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/mp5"
-            android:layout_marginBottom="@dimen/mp5"
-            android:background="@drawable/danger_rounded_button"
-            android:gravity="center"
-            android:text="@string/rejectRequest"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            app:spinning_bar_color="#FFF"
-            app:spinning_bar_padding="@dimen/mp7"
-            app:spinning_bar_width="@dimen/mp5" />
+            android:layout_height="match_parent"
+            android:layout_above="@id/acceptRequestUpper"
+            android:layout_below="@id/appBarLayout"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/acceptRequestUpper"
-        android:layout_below="@id/appBarLayout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-</RelativeLayout>
+    <include layout="@layout/post_review_bottom_sheet"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -107,6 +107,7 @@ public class DonationDetailFragment extends Fragment implements View.OnClickList
                         imageSlider.setScrollTimeInSec(4);
                         imageSlider.startAutoCycle();
                         mainRoot.setVisibility(View.VISIBLE);
+                        Log.e(TAG, "Donation is Reviewed: " + donation.isReviewed());
                     }
                 }
             }

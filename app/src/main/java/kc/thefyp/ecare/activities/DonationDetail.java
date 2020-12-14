@@ -160,6 +160,8 @@ public class DonationDetail extends AppCompatActivity implements View.OnClickLis
             makeRequestUpper.setVisibility(View.GONE);
         }
 
+        Log.e(TAG, "Donation is Reviewed: " + donation.isReviewed());
+        
         // Load Donation Owner Detail
         loadOwnerDetail();
     }

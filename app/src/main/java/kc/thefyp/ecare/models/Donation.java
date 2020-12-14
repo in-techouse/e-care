@@ -9,7 +9,7 @@ public class Donation implements Serializable {
     private double latitude, longitude;
     private int quantity;
     private List<String> images;
-    private boolean isDonated;
+    private boolean isDonated, isReviewed;
     private long timestamps;
 
     public Donation() {
@@ -19,7 +19,7 @@ public class Donation implements Serializable {
         timestamps = 0;
     }
 
-    public Donation(String id, String userId, String category, String address, String name, String description, String contact, String donatedTo, double latitude, double longitude, int quantity, List<String> images, boolean isDonated, long timestamps) {
+    public Donation(String id, String userId, String category, String address, String name, String description, String contact, String donatedTo, double latitude, double longitude, int quantity, List<String> images, boolean isDonated, boolean isReviewed, long timestamps) {
         this.id = id;
         this.userId = userId;
         this.category = category;
@@ -33,6 +33,7 @@ public class Donation implements Serializable {
         this.quantity = quantity;
         this.images = images;
         this.isDonated = isDonated;
+        this.isReviewed = isReviewed;
         this.timestamps = timestamps;
     }
 
@@ -146,5 +147,13 @@ public class Donation implements Serializable {
 
     public void setTimestamps(long timestamps) {
         this.timestamps = timestamps;
+    }
+
+    public boolean isReviewed() {
+        return isReviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        isReviewed = reviewed;
     }
 }
