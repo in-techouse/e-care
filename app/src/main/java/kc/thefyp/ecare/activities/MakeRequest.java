@@ -154,11 +154,11 @@ public class MakeRequest extends AppCompatActivity implements View.OnClickListen
                             }
                         }
                     }
-                    dialog.dismiss();
-                    Log.e(TAG, "Total Donations are: " + count);
-                    if (count > 4) {
-                        Helpers.showErrorWithActivityClose(MakeRequest.this, Constants.ERROR, Constants.CANNOT_REQUEST_MORE_DONATIONS);
-                    }
+                }
+                dialog.dismiss();
+                Log.e(TAG, "Total Donations are: " + count);
+                if (count > 4) {
+                    Helpers.showErrorWithActivityClose(MakeRequest.this, Constants.ERROR, Constants.CANNOT_REQUEST_MORE_DONATIONS);
                 }
             }
 

@@ -71,6 +71,7 @@ public class AnnouncementDetail extends AppCompatActivity implements View.OnClic
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // intent => bundle => data
         Intent it = getIntent();
         if (it == null) {
             Log.e(TAG, "Intent is null");
